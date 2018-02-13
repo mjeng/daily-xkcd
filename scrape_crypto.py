@@ -8,10 +8,12 @@ from twilio.rest import Client
 
 
 
-def send_prices
+def send_prices():
+    return None
 
 
-
+def main(client, send_to):
+    return None
 
 if __name__ == "__main__":
     send_prices()

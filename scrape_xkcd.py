@@ -6,14 +6,6 @@ import sys
 import random
 import schedule
 
-# TODO: IMPORTANT redo git commits - need to remove personal number, account_sid, auth_token
-# TODO: switch from list to text file to store used comics
-# TODO: ^^in conjunction with this switch the program to sth that only
-# has to run periodically and not be constantly on
-# TODO: try git branch
-# TODO: figure out how to take text feedback from person receiving text
-# and implement a STOP option + other stuff
-# TODO: maybe make this into a hw reminder kind of app too
 
 def find_comic(used_comics):
     comic_num = random.choice(used_comics)
@@ -28,32 +20,20 @@ def find_comic(used_comics):
     return img_url
 
 
-def send_comic(comic_url, client):
-    message = client.messages.create(
-        "",
-        from_="",
-        media_url=comic_url
-    )
-
-
-def execute_task(used_comics, client):
+def execute_task(used_comics, client, send_to):
     print(used_comics)
     if used_comics == []:
         sys.exit("wtf this program has been running for too long")
     img_url = find_comic(used_comics)
-    send_comic(img_url, client)
+    client.send_mms(send_to, img_url)
 
 
 
-def main():
+def main(client, send_to):
     num_existing_comics = 1953
     used_comics = [i+1 for i in range(num_existing_comics)]
 
-    account_sid = ""
-    auth_token = ""
-    client = Client(account_sid, auth_token)
-
-    schedule.every(5).seconds.do(execute_task, used_comics, client)
+    schedule.every(5).seconds.do(execute_task, used_comics, client, send_to)
 
     try:
         while True:

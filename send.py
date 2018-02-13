@@ -1,9 +1,10 @@
 from twilio.rest import Client
 
 class MyClient:
+
     def __init__(self, account_sid, auth_token, my_num):
         assert isinstance(my_num, str), "Sender must be a number converted to string"
-        self.client = Client(account_side, auth_token)
+        self.client = Client(account_sid, auth_token)
         self.num = my_num
 
     def send_sms(self, dest_num, message):
@@ -19,8 +20,8 @@ class MyClient:
             self.client.messages.create(
                 dest_num,
                 from_=self.num,
-                body=message
-                media=
+                body=message,
+                media_url=media_link
             )
         else:
             self.client.messages.create(
@@ -28,5 +29,3 @@ class MyClient:
                 from_=self.num,
                 media_url=media_link
             )
-
-    
