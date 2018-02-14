@@ -4,17 +4,6 @@ from bs4 import BeautifulSoup
 page = urlopen("https://xkcd.com/")
 soup = BeautifulSoup(page, 'html.parser')
 
-# def scrape_test():
-#     page = urlopen("https://xkcd.com/")
-#     print(page)
-#     soup = BeautifulSoup(page, 'html.parser')
-#     print(soup)
-#     print(soup.find('h1', attrs={"id": "middleContainer"}))
-#
-# if __name__ == "__main__":
-#     scrape_test()
-
-
 
 def test():
     # can also use soup.find("sth", {"class": sth, "id": sth})
@@ -33,14 +22,23 @@ page2 = urlopen("https://coinranking.com/")
 soup2 = BeautifulSoup(page2, 'html.parser')
 
 def remove_comma(s):
-    # TODO
+    new_str = ''
+    for c in s:
+        if c != ',':
+            new_str += c
+    return new_str
+
 
 def test2():
     coin_dict = {}
-    coin_list = soup2.find_all("div", {"class": "coin-list__body"})
-    print(coin_list)
+    coin_list_body = soup2.find("div", {"class": "coin-list__body"})
+    coin_list = coin_list_body.find_all("a", {"class": "coin-list__body__row"})
+
     for row in coin_list:
         name = row.find("span", {"class": "coin-name"}).string
         price = row.find("span", {"class": "coin-list__body__row__price__value"}).string
-        coin_dict = {name: float(price)}
+        price = remove_comma(price)
+        price = float(price)
+        coin_dict[name] = price
+
     print(coin_dict)

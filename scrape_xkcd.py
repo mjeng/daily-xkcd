@@ -10,6 +10,7 @@ import schedule
 def find_comic(used_comics):
     comic_num = random.choice(used_comics)
     used_comics.remove(comic_num)
+    print("Sending comic: " + str(comic_num))
 
     page_url = "https://xkcd.com/" + str(comic_num) + "/"
     page = urlopen(page_url)
@@ -19,14 +20,11 @@ def find_comic(used_comics):
 
     return img_url
 
-
 def execute_task(used_comics, client, send_to):
-    print(used_comics)
     if used_comics == []:
         sys.exit("wtf this program has been running for too long")
     img_url = find_comic(used_comics)
     client.send_mms(send_to, img_url)
-
 
 
 def main(client, send_to):
