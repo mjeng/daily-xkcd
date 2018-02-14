@@ -3,7 +3,6 @@ import send
 import scrape_xkcd
 import scrape_crypto
 
-# TODO: IMPORTANT redo git commits - need to remove personal number, account_sid, auth_token
 # TODO: switch from list to text file to store used comics
 # TODO: ^^in conjunction with this switch the program to sth that only
 # has to run periodically and not be constantly on
