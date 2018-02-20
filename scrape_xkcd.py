@@ -6,6 +6,7 @@ import random
 import schedule
 import re
 
+# TODO add xkcd's message to the text
 
 def most_recent_comic_num():
     main_website = "https://xkcd.com/"
@@ -23,11 +24,21 @@ def most_recent_comic_num():
 
     # Regex to get number out of perm_link
     regex_str = main_website + ".*/"
-    m = re.search(regex_str, perm_link)
-    comic_num = m.group(0)[len(main_website):][:-1]
+    match = re.search(regex_str, perm_link)
+    comic_num = match.group(0)[len(main_website):][:-1]
 
     return int(comic_num)
 
+def check_url(img_url):
+    pattern = "https://imgs.xkcd.com/comics/" + ".*"
+    matches = re.search(pattern, img_url)
+    try:
+        assert matches is not None, "img_url format either has changed or the HTML structure has been changed"
+    except AssertionError as e:
+        print(str(e))
+        return False
+
+    return True
 
 def find_comic(used_comics):
     comic_num = random.choice(used_comics)
@@ -37,24 +48,37 @@ def find_comic(used_comics):
     page_url = "https://xkcd.com/" + str(comic_num) + "/"
     page = urlopen(page_url)
     soup = BeautifulSoup(page, 'html.parser')
-    img_url = soup.find_all('img')[1].attrs['src']
+    try:
+        img_url = soup.find_all('img')[1].attrs['src']
+    except Exception as e:
+        # TODO replace with some better way to report error
+        print("Error with finding img_url. Maybe xkcd page format changed. Listed error:")
+        print(str(e))
     img_url = "https:" + img_url
-
-    return img_url
+    proper_form = check_url(img_url)
+    if proper_form:
+        return img_url
+    else:
+        return None
 
 
 def execute_task(used_comics, client, send_to):
     if used_comics == []:
         sys.exit("wtf this program has been running for too long")
     img_url = find_comic(used_comics)
-    client.send_mms(send_to, img_url)
+    if img_url is None:
+        pass
+    else:
+        client.send_mms(send_to, img_url)
 
 
-def main(client, send_to):
+def main(client, send_to, frq):
     num_existing_comics = most_recent_comic_num()
     used_comics = [i+1 for i in range(num_existing_comics)]
 
-    schedule.every(5).seconds.do(execute_task, used_comics, client, send_to)
+    # schedule.every(5).seconds.do(execute_task, used_comics, client, send_to)
+    schedule_cmd = "schedule.every(" + str(frq['num']) + ")." + frq['units'] + ".do(execute_task, used_comics, client, send_to)"
+    exec(schedule_cmd)
 
     try:
         while True:
