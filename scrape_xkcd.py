@@ -7,6 +7,13 @@ import schedule
 import re
 
 # TODO add xkcd's message to the text
+# TODO write list of unused comics to text file
+
+
+############## UTILS ##############
+
+
+MAIN_SITE = "https://xkcd.com/"
 
 def most_recent_comic_num():
     main_website = "https://xkcd.com/"
@@ -29,6 +36,7 @@ def most_recent_comic_num():
 
     return int(comic_num)
 
+
 ESCAPE_CHARACTERS = ['.', '*', '+', '?', '|']
 
 def check_url(img_url):
@@ -39,9 +47,6 @@ def check_url(img_url):
             escaped_pattern += "\\"
         escaped_pattern += c
     escaped_pattern += ".*"
-    print(escaped_pattern)
-    print(img_url)
-
 
     matches = re.search(escaped_pattern, img_url)
     try:
@@ -52,36 +57,64 @@ def check_url(img_url):
 
     return True
 
-def find_comic(unused_comics):
-    comic_num = random.choice(unused_comics)
-    unused_comics.remove(comic_num)
-    print("Sending comic: " + str(comic_num))
-
-    page_url = "https://xkcd.com/" + str(comic_num) + "/"
+def find_comic(comic_num):
+    page_url = MAIN_SITE + str(comic_num) + "/"
     page = urlopen(page_url)
     soup = BeautifulSoup(page, 'html.parser')
+
     try:
-        img_url = soup.find_all('img')[1].attrs['src']
+        comic_div = soup.find('div', {'id': 'comic'})
+        img_url = comic_div.find('img').attrs['src']
     except Exception as e:
         # TODO replace with some better way to report error
         print("Error with finding img_url. Maybe xkcd page format changed. Listed error:")
         print(str(e))
+
     img_url = "https:" + img_url
     proper_form = check_url(img_url)
+
     if proper_form:
         return img_url
     else:
         return None
 
+def find_comic_caption(comic_num):
+    page_url = MAIN_SITE + str(comic_num) + "/"
+    page = urlopen(page_url)
+    soup = BeautifulSoup(page, 'html.parser')
+
+    try:
+        comic_div = soup.find('div', {'id': 'comic'})
+        img_caption = comic_div.find('img').attrs['title']
+    except Exception as e:
+        # TODO replace with some better way to report error
+        print("Error with finding img_caption. Maybe xkcd page format changed. Listed error:")
+        print(str(e))
+
+    return img_caption
+
+
+############## MAIN ##############
+
 
 def execute_task(unused_comics, client, send_to):
+    comic_num = random.choice(unused_comics)
+    unused_comics.remove(comic_num)
+
     if unused_comics == []:
         sys.exit("wtf this program has been running for too long")
-    img_url = find_comic(unused_comics)
+
+    img_url = find_comic(comic_num)
+    img_caption = find_comic_caption(comic_num)
+
     if img_url is None:
-        pass
+        print("Could not find comic #" + str(comic_num))
     else:
-        client.send_mms(send_to, img_url)
+        print("Sending comic: " + str(comic_num))
+        if img_caption is None:
+            client.send_mms(send_to, img_url)
+        else:
+            client.send_mms(send_to, img_url, img_caption)
 
 # TODO make loop take into account new comics added after program has already begun executing
 
