@@ -29,9 +29,21 @@ def most_recent_comic_num():
 
     return int(comic_num)
 
+ESCAPE_CHARACTERS = ['.', '*', '+', '?', '|']
+
 def check_url(img_url):
-    pattern = "https://imgs.xkcd.com/comics/" + ".*"
-    matches = re.search(pattern, img_url)
+    pattern = "https://imgs.xkcd.com/comics/"
+    escaped_pattern = ''
+    for c in pattern:
+        if c in ESCAPE_CHARACTERS:
+            escaped_pattern += "\\"
+        escaped_pattern += c
+    escaped_pattern += ".*"
+    print(escaped_pattern)
+    print(img_url)
+
+
+    matches = re.search(escaped_pattern, img_url)
     try:
         assert matches is not None, "img_url format either has changed or the HTML structure has been changed"
     except AssertionError as e:
@@ -40,9 +52,9 @@ def check_url(img_url):
 
     return True
 
-def find_comic(used_comics):
-    comic_num = random.choice(used_comics)
-    used_comics.remove(comic_num)
+def find_comic(unused_comics):
+    comic_num = random.choice(unused_comics)
+    unused_comics.remove(comic_num)
     print("Sending comic: " + str(comic_num))
 
     page_url = "https://xkcd.com/" + str(comic_num) + "/"
@@ -62,26 +74,33 @@ def find_comic(used_comics):
         return None
 
 
-def execute_task(used_comics, client, send_to):
-    if used_comics == []:
+def execute_task(unused_comics, client, send_to):
+    if unused_comics == []:
         sys.exit("wtf this program has been running for too long")
-    img_url = find_comic(used_comics)
+    img_url = find_comic(unused_comics)
     if img_url is None:
         pass
     else:
         client.send_mms(send_to, img_url)
 
+# TODO make loop take into account new comics added after program has already begun executing
 
 def main(client, send_to, frq):
     num_existing_comics = most_recent_comic_num()
-    used_comics = [i+1 for i in range(num_existing_comics)]
+    unused_comics = [i+1 for i in range(num_existing_comics)]
 
-    # schedule.every(5).seconds.do(execute_task, used_comics, client, send_to)
-    schedule_cmd = "schedule.every(" + str(frq['num']) + ")." + frq['units'] + ".do(execute_task, used_comics, client, send_to)"
+    # schedule.every(5).seconds.do(execute_task, unused_comics, client, send_to)
+    schedule_cmd = "schedule.every(" + str(frq['num']) + ")." + frq['units'] + ".do(execute_task, unused_comics, client, send_to)"
     exec(schedule_cmd)
 
     try:
         while True:
+            # when new comics are added, they'll be automatically added to list of unused comics
+            old_num_existing = num_existing_comics
+            num_existing_comics = most_recent_comic_num()
+            for i in range(num_existing_comics - old_num_existing):
+                unused_comics.append(num_existing_comics - i)
+
             schedule.run_pending()
             time.sleep(1)
     except KeyboardInterrupt:

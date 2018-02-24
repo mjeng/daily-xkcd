@@ -10,7 +10,7 @@ import scrape_crypto
 # TODO: figure out how to take text feedback from person receiving text
 # and implement a STOP option + other stuff
 # TODO: maybe make this into a hw reminder kind of app too
-
+# TODO: try Docker for deployment
 
 # currently using this for testing purposes while being able to commit to repository
 # probably won't keep format later on
