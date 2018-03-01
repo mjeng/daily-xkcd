@@ -2,6 +2,7 @@ import time
 import sys
 import random
 import schedule
+from pathlib import Path
 
 from xkcd.utils import *
 
@@ -41,11 +42,17 @@ def execute_task(user_file, client, send_to):
 def main(client, send_to, frq):
     num_existing_comics = most_recent_comic_num()
     user_file = PROJECT_PATH + str(send_to) + ".txt"
+    path_obj = Path(user_file)
+    file_exists = path_obj.is_file()
 
-    f = open(user_file, 'w+')
-    for i in range(num_existing_comics):
-        f.write(str(i+1) + "\n")
-    f.close()
+    # so that we can stop program and restart where we left off
+    if file_exists:
+        pass
+    else:
+        f = open(user_file, 'w+')
+        for i in range(num_existing_comics):
+            f.write(str(i+1) + "\n")
+        f.close()
 
     schedule_cmd = "schedule.every(" + str(frq['num']) + ")." + frq['units'] + ".do(execute_task, user_file, client, send_to)"
     exec(schedule_cmd)
