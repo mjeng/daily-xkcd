@@ -10,4 +10,4 @@ Currently for the program to run, you'd need your own Twilio account. Upload a t
 3. The number you'd like to send to
 4. The number you're sending from (this should be a Twilio number)
 
-After doing this, simply run `python3 temp_main.py` and simply follow the prompts after that.
+After doing this, simply run `python3 temp_main.py` and follow the prompts after that.
