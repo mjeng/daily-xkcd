@@ -1,6 +1,6 @@
 import schedule
-import send
-import scrape_xkcd
+import sender
+from xkcd import scrape_xkcd
 import scrape_crypto
 
 # TODO: switch from list to text file to store used comics
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     send_from = f.readline()[:-1]
     print(send_to)
     print(send_from)
-    client = send.MyClient(account_sid, auth_token, send_from)
+    client = sender.MyClient(account_sid, auth_token, send_from)
 
     option = int(input("Choose an option:\n(1) execute scrape_xkcd\n(2) execute scrape_crypto\n"))
     assert option == 1 or option == 2, "Not valid option"
