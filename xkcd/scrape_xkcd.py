@@ -5,14 +5,25 @@ import schedule
 
 from xkcd.utils import *
 
-# TODO write list of unused comics to text file
+PROJECT_PATH = "xkcd/"
 
-def execute_task(unused_comics, client, send_to):
-    comic_num = random.choice(unused_comics)
-    unused_comics.remove(comic_num)
+def execute_task(user_file, client, send_to):
+    f = open(user_file, 'r')
+    comics_left = list(f.readlines())
+    f.close()
 
-    if unused_comics == []:
-        sys.exit("wtf this program has been running for too long")
+    if comics_left == []:
+        sys.exit("sent every available comic :O")
+
+    comic_choice = random.choice(comics_left)
+    comics_left.remove(comic_choice)
+    comic_num = int(comic_choice)
+
+    # write updated list back to file
+    f = open(user_file, 'w')
+    for comic in comics_left:
+        f.write(comic)
+    f.close()
 
     img_url = find_comic(comic_num)
     img_caption = find_comic_caption(comic_num)
@@ -29,18 +40,26 @@ def execute_task(unused_comics, client, send_to):
 
 def main(client, send_to, frq):
     num_existing_comics = most_recent_comic_num()
-    unused_comics = [i+1 for i in range(num_existing_comics)]
+    user_file = PROJECT_PATH + str(send_to) + ".txt"
 
-    schedule_cmd = "schedule.every(" + str(frq['num']) + ")." + frq['units'] + ".do(execute_task, unused_comics, client, send_to)"
+    f = open(user_file, 'w+')
+    for i in range(num_existing_comics):
+        f.write(str(i+1) + "\n")
+    f.close()
+
+    schedule_cmd = "schedule.every(" + str(frq['num']) + ")." + frq['units'] + ".do(execute_task, user_file, client, send_to)"
     exec(schedule_cmd)
 
     try:
         while True:
-            # when new comics are added, they'll be automatically added to list of unused comics
+            # when new comics are added, they'll be automatically added to text file of unused comics
             old_num_existing = num_existing_comics
             num_existing_comics = most_recent_comic_num()
-            for i in range(num_existing_comics - old_num_existing):
-                unused_comics.append(num_existing_comics - i)
+            if num_existing_comics - old_num_existing != 0:
+                f = open(user_file, 'a')
+                for i in range(num_existing_comics - old_num_existing):
+                    f.write(str(num_existing_comics - i) + "\n")
+                f.close()
 
             schedule.run_pending()
             time.sleep(1)
