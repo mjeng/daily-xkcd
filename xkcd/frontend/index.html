@@ -7,19 +7,55 @@
   <body>
 
     <header>
-      <div class="name">Matthew Jeng</div>
+      <div id="name">
+        <a target="_blank" href="https://mjeng.github.io">
+          Matthew Jeng
+        </a>
+      </div>
+
       <div class="nav">some option</div>
     </header>
 
-    <div class="title">
-      <strong>Sign up to receive daily xkcd comics!</strong>
+    <div class="header">
+      <strong id="title">Sign up to receive daily xkcd comics!</strong>
+      <div class="notes">
+        <p>Note: am not affiliated with xkcd in any way</p>
+        <p class="inline">Another note: all credits to </p>
+        <a class="inline" href="https://xkcd.com/">xkcd</a>
+        <p class="inline">!</p>
+      </div>
     </div>
 
     <form action="/some_page.php">
       <div class="inputs">
-        Field 1: <input type="text"><br>
-        Field 2: <input type="text"><br>
-        Time (PST): <select name="time" id="time">
+        Phone #: <input type="text"><br>
+        Time* (PST):
+        <select name="time" id="time">
+          <option value="12:00 AM">12:00 AM</option>
+        	<option value="12:15 AM">12:15 AM</option>
+        	<option value="12:30 AM">12:30 AM</option>
+        	<option value="12:45 AM">12:45 AM</option>
+
+          <option value="1:00 AM">1:00 AM</option>
+        	<option value="1:15 AM">1:15 AM</option>
+        	<option value="1:30 AM">1:30 AM</option>
+        	<option value="1:45 AM">1:45 AM</option>
+
+          <option value="2:00 AM">2:00 AM</option>
+        	<option value="2:15 AM">2:15 AM</option>
+        	<option value="2:30 AM">2:30 AM</option>
+        	<option value="2:45 AM">2:45 AM</option>
+
+          <option value="3:00 AM">3:00 AM</option>
+        	<option value="3:15 AM">3:15 AM</option>
+        	<option value="3:30 AM">3:30 AM</option>
+        	<option value="3:45 AM">3:45 AM</option>
+
+          <option value="4:00 AM">4:00 AM</option>
+        	<option value="4:15 AM">4:15 AM</option>
+        	<option value="4:30 AM">4:30 AM</option>
+        	<option value="4:45 AM">4:45 AM</option>
+
         	<option value="5:00 AM">5:00 AM</option>
         	<option value="5:15 AM">5:15 AM</option>
         	<option value="5:30 AM">5:30 AM</option>
@@ -119,8 +155,15 @@
       <input type="submit" value="Submit">
     </form>
 
+    <div class="logo">
+      <a target="_blank" href="https://xkcd.com/">
+        <img src="xkcd-logo.png" alt="xkcd logo">
+      </a>
+    </div>
+
     <footer>
-        **To stop receiving messages, simply reply STOP to the number you receive texts from
+        <div>*The time during every day you'd like to receive an xkcd comic!</div>
+        <div>**To stop receiving messages, simply reply STOP to the number you receive texts from</div>
     </footer>
 
   </body>

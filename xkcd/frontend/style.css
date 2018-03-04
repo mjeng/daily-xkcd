@@ -7,21 +7,37 @@ html, body {
   overflow: hidden;
   font-family: "Comic Sans MS", cursive, sans-serif;
 }
-.name {
+/* nav bar */
+#name {
   float: left;
   width: 50%;
+}
+#name a {
+  color: black;
+  text-decoration: none;
 }
 .nav {
   float: left;
   width: 50%;
   text-align: right;
 }
-.title {
+/* title */
+.header {
   text-align: center;
-  font-size: xx-large;
   padding: 10%;
   font-family: "Comic Sans MS", cursive, sans-serif;
 }
+#title {
+  font-size: xx-large;
+}
+.notes p {
+  margin: 0;
+  font-size: normal;
+}
+.inline {
+  display: inline;
+}
+/* form */
 form {
   width: 100%;
   height: auto;
@@ -32,11 +48,23 @@ form {
   text-align: left;
   margin: 0 auto;
 }
+/* logo */
+.logo {
+  margin-top: 10%;
+  width: 100%;
+}
+.logo img {
+  display: block;
+  margin: 0 auto;
+  height: 15%;
+  width: auto;
+}
+/* footer */
 footer {
   box-sizing: border-box;
   position: absolute;
   width: 100%;
   text-align: right;
   bottom: 0;
-  right: 0; /* ????? */
+  right: 10px; /* ????? */
 }
