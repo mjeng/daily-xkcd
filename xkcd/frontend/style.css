@@ -48,8 +48,28 @@ form {
   text-align: left;
   margin: 0 auto;
 }
+input#phone {
+  border: none;
+  border-bottom: 1px solid black;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  text-align: center;
+  margin-bottom: 5px;
+  /* font-size: small; */
+}
+input[type=submit] {
+  border: none;
+  border-radius: 10px;
+  background-color: #f5f5dc;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+input[type=submit]:hover {
+  cursor: pointer;
+}
+input[type=submit]:active {
+  background-color: #dadaed;
+}
 .submit {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 .submit p {
   display: inline;
