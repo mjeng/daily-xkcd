@@ -48,6 +48,25 @@ form {
   text-align: left;
   margin: 0 auto;
 }
+.submit {
+  margin-top: 10px;
+}
+.submit p {
+  display: inline;
+  font-size: small;
+}
+.submit #spacing-middle {
+  display: inline-block;
+  width: 7px;
+}
+.submit #spacing-left, .submit #spacing-right {
+  display: inline-block;
+  width: 0.5px;
+}
+.submit #spacing-right-right {
+  display: inline-block;
+  width: 40px;
+}
 /* logo */
 .logo {
   margin-top: 10%;
@@ -65,6 +84,6 @@ footer {
   position: absolute;
   width: 100%;
   text-align: right;
-  bottom: 0;
-  right: 10px; /* ????? */
+  bottom: 10px;
+  right: 15px; /* had to specify 0px for it not to run over the page for some reason */
 }
