@@ -29,7 +29,7 @@ def send_prices():
 def execute_task(which_coins, client, send_to):
     """
     which_coins: list of (type str) coin names to send
-    client: send.MyClient object
+    client: sender.MyClient object
     send_to: string of number to send to
     """
     return None

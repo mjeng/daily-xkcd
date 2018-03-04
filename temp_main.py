@@ -3,7 +3,6 @@ import sender
 from xkcd import scrape_xkcd
 import scrape_crypto
 
-# TODO: switch from list to text file to store used comics
 # TODO: ^^in conjunction with this switch the program to sth that only
 # has to run periodically and not be constantly on
 # TODO: try git branch
@@ -11,7 +10,7 @@ import scrape_crypto
 # and implement a STOP option + other stuff
 # TODO: maybe make this into a hw reminder kind of app too
 # TODO: try Docker for deployment
-# TODO build frontend
+# TODO: build frontend
 
 # currently using this for testing purposes while being able to commit to repository
 # probably won't keep format later on
@@ -21,8 +20,7 @@ if __name__ == "__main__":
     auth_token = f.readline()[:-1]
     send_to = f.readline()[:-1]
     send_from = f.readline()[:-1]
-    print(send_to)
-    print(send_from)
+    print("Sending to: " + send_to + " from " + send_from)
     client = sender.MyClient(account_sid, auth_token, send_from)
 
     option = int(input("Choose an option:\n(1) execute scrape_xkcd\n(2) execute scrape_crypto\n"))
