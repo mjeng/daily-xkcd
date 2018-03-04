@@ -1,11 +1,68 @@
 <html>
   <head>
     <title>daily xkcd</title>
+    <style>
+      html, body {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 2px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      .name {
+        float: left;
+        width: 50%;
+      }
+      .nav {
+        float: left;
+        width: 50%;
+        text-align: right;
+      }
+      .title {
+        text-align: center;
+        font-size: xx-large;
+        padding: 10%;
+      }
+      .inputs {
+        width: 100%;
+        height: auto;
+        text-align: center;
+      }
+      footer {
+        box-sizing: border-box;
+        position: absolute;
+        width: 100%;
+        text-align: right;
+        bottom: 0;
+        right: 0; /* ????? */
+      }
 
+    </style>
   </head>
 
   <body>
-    
+
+    <header>
+      <div class="name">Matthew Jeng</div>
+      <div class="nav">some option</div>
+    </header>
+
+    <div class="title">
+      <strong>Sign up to receive daily xkcd comics!</strong>
+    </div>
+
+    <div class="inputs">
+      <form action="/some_page.php">
+        Field 1: <input type="text"><br>
+        Field 2: <input type="text"><br>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+
+    <footer>
+        **To stop receiving messages, simply reply STOP to the number you receive texts from
+    </footer>
 
   </body>
 </html>
