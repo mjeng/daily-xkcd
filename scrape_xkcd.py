@@ -4,9 +4,9 @@ import random
 import schedule
 from pathlib import Path
 
-from xkcd.utils import *
+from utils import *
 
-PROJECT_PATH = "xkcd/"
+PROJECT_PATH = ""
 
 def execute_task(user_file, client, send_to):
     f = open(user_file, 'r')

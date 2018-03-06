@@ -1,7 +1,6 @@
 import schedule
 import sender
-from xkcd import scrape_xkcd
-import scrape_crypto
+import scrape_xkcd
 
 # TODO: ^^in conjunction with this switch the program to sth that only
 # has to run periodically and not be constantly on
@@ -23,30 +22,25 @@ if __name__ == "__main__":
     print("Sending to: " + send_to + " from " + send_from)
     client = sender.MyClient(account_sid, auth_token, send_from)
 
-    option = int(input("Choose an option:\n(1) execute scrape_xkcd\n(2) execute scrape_crypto\n"))
-    assert option == 1 or option == 2, "Not valid option"
+    option = print("Executing scrape_xkcd\n")
 
-    if option == 1:
-        frq_specs = {}
-        units_option = int(input("Choose a unit of time:\n(1) seconds\n(2) minutes\n(3) hours\n(4) days\n"))
-        assert units_option in [1, 2, 3, 4], "Not valid option"
-        if units_option == 1:
-            frq_specs['units'] = "seconds"
-        if units_option == 2:
-            frq_specs['units'] = "minutes"
-        if units_option == 3:
-            frq_specs['units'] = "hours"
-        if units_option == 4:
-            frq_specs['units'] = "days"
+    frq_specs = {}
+    units_option = int(input("Choose a unit of time:\n(1) seconds\n(2) minutes\n(3) hours\n(4) days\n"))
+    assert units_option in [1, 2, 3, 4], "Not valid option"
+    if units_option == 1:
+        frq_specs['units'] = "seconds"
+    if units_option == 2:
+        frq_specs['units'] = "minutes"
+    if units_option == 3:
+        frq_specs['units'] = "hours"
+    if units_option == 4:
+        frq_specs['units'] = "days"
 
-        num_option = input("Every how many " + frq_specs['units'] + " would you like your message to send (number)? ")
-        try:
-            frq_specs['num'] = int(num_option)
-        except Exception as e:
-            print("Invalid input. Error:")
-            print(str(e))
+    num_option = input("Every how many " + frq_specs['units'] + " would you like your message to send (number)? ")
+    try:
+        frq_specs['num'] = int(num_option)
+    except Exception as e:
+        print("Invalid input. Error:")
+        print(str(e))
 
-        scrape_xkcd.main(client, send_to, frq_specs)
-
-    elif option == 2:
-        scrape_crypto.main(client, send_to)
+    scrape_xkcd.main(client, send_to, frq_specs)
