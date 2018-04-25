@@ -23,7 +23,7 @@ html, body {
   display: inline-block;
   float: left;
   font-size: small;
-  padding-top: 3px; /* to align it with the text it's pointing to */
+  padding-top: 4px; /* to align it with the text it's pointing to */
   margin: 0 0 0 7px;
 }
 /* .nav {
@@ -111,7 +111,7 @@ input[type=submit]:active {
 .logo img {
   display: block;
   margin: 0 auto;
-  height: 15%;
+  height: 12%;
   width: auto;
 }
 /* footer *******************************************/

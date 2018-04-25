@@ -25,18 +25,18 @@
         <div class="notes">
           <p>Note: am not affiliated with xkcd in any way</p>
           <p class="inline">Another note: all credits to </p>
-          <a class="inline" href="https://xkcd.com/">xkcd</a>
+          <a class="inline" target=_blank href="https://xkcd.com/">xkcd</a>
           <p class="inline">!</p>
         </div>
       </div>
     </div>
 
-    <form action="/some_page.php">
-
+    <form action="/some_page.php" method="post">
+    <!-- <form> -->
       <div class="inputs">
-        Phone #: <input id="phone" type="text"><br>
+        Phone #: <input id="phone" type="text" name="phone"><br>
         Time* (PST):
-        <select name="time" id="time">
+        <select id="time" name="time">
           <option value="12:00 AM">12:00 AM</option>
         	<option value="12:15 AM">12:15 AM</option>
         	<option value="12:30 AM">12:30 AM</option>
