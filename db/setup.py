@@ -1,13 +1,7 @@
 import sys
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 from time import strftime, gmtime
 import numpy as np
-
-WORKBOOK_NAME = "daily-xkcd user info"
-# use creds to create a client to interact with the Google Drive API
-SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-
+from client import *
 
 def get_time():
     TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
@@ -39,10 +33,6 @@ def get_shaped_range(ws, r):
 
 
 def run_setup():
-    # TODO might need to add dynamic pathing to client_secret.json
-    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', SCOPE)
-    client = gspread.authorize(creds)
-
     try:
         wbs = client.openall()
         assert len(wbs) == 0, "Workbooks already exist"
@@ -114,8 +104,6 @@ def run_setup():
 
 # NOTE only run during testing phase
 def reset():
-    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', SCOPE)
-    client = gspread.authorize(creds)
     wb = client.open(WORKBOOK_NAME)
     wss = wb.worksheets()[1:]
     for ws in wss:
