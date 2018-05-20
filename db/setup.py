@@ -1,7 +1,8 @@
 import sys
 from time import strftime, gmtime
 import numpy as np
-from client import *
+import client
+from client import WORKBOOK_NAME
 
 def get_time():
     TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
@@ -34,19 +35,19 @@ def get_shaped_range(ws, r):
 
 def run_setup():
     try:
-        wbs = client.openall()
+        wbs = client.CLIENT.openall()
         assert len(wbs) == 0, "Workbooks already exist"
     except AssertionError as e:
         print(e)
         print(wbs)
 
     # NOTE it's possible to create multiple workbooks of the same name (not same of worksheets)
-    # TODO change back the client.create()
-    wb = client.open(WORKBOOK_NAME)
+    # TODO change back the client.CLIENT.create()
+    wb = client.CLIENT.open(WORKBOOK_NAME)
 
     # # retrieve workbook
     # try:
-    #     wb = client.open(WORKBOOK_NAME)
+    #     wb = client.CLIENT.open(WORKBOOK_NAME)
     # except gspread.exceptions.SpreadsheetNotFound:
     #     # TODO report error somehow when server is setup
 
@@ -104,7 +105,7 @@ def run_setup():
 
 # NOTE only run during testing phase
 def reset():
-    wb = client.open(WORKBOOK_NAME)
+    wb = client.CLIENT.open(WORKBOOK_NAME)
     wss = wb.worksheets()[1:]
     for ws in wss:
         wb.del_worksheet(ws)

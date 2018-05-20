@@ -6,6 +6,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 _SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
 _CREDS = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', _SCOPE)
-client = gspread.authorize(_CREDS)
+CLIENT = gspread.authorize(_CREDS)
 
 WORKBOOK_NAME = "daily-xkcd user info"
+
+def reload_client():
+    global CLIENT
+    CLIENT = gspread.authorize(_CREDS)
