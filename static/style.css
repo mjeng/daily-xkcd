@@ -8,18 +8,18 @@ html, body {
   font-family: "Comic Sans MS", cursive, sans-serif;
 }
 /* nav bar *******************************************/
-#name {
+#myname {
   float: left;
   width: 50%;
   padding: 5px 0 0 5px;
 }
-#name a {
+#myname a {
   display: inline-block;
   float: left;
   color: black;
   text-decoration: none;
 }
-#name p {
+#myname p {
   display: inline-block;
   float: left;
   font-size: small;
@@ -63,7 +63,7 @@ form {
   text-align: left;
   margin: 0 auto;
 }
-input#phone {
+input#phone, input#name {
   border: none;
   border-bottom: 1px solid black;
   font-family: "Comic Sans MS", sans-serif;
@@ -71,6 +71,9 @@ input#phone {
   margin-bottom: 5px;
   width: 100px;
   /* font-size: small; */
+}
+input#name {
+    width: 120px
 }
 input[type=submit] {
   border: none;

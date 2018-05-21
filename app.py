@@ -3,8 +3,8 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def homepage():
-    # assert request.method == "POST" # not sure if this works
-    print("we here")
+    if request.method == "POST":
+        pass # TODO: to be implemented
     print(request.method)
     print(request.form)
     return render_template("index.html")
