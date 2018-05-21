@@ -1,18 +1,18 @@
 # NOTE: run with one of the following:
-#   python3 setup.py --run
-#   python3 setup.py --clean
+#   python3 db_setup.py --run
+#   python3 db_setup.py --clean
 
 import sys
 from time import strftime, gmtime
 import numpy as np
 import db_client
-from db_client import WORKBOOK_NAME
 import scrape_utils
 
 STAT_START_COL = {"letter": 'G', "number": 7}
 AUTHOR = "Matthew Jeng"
 TIMEZONE = "UTC"
-COLUMNS = "name, number, num comics drawn, comics-seen (up to half), comics-left (after half)"
+COLUMNS = "name, phone (xxxyyyzzzz), num comics drawn (#), last mrcn (#), comics-seen (x,x,x,..)"
+BLANK = ''
 
 METADATA = {"author": AUTHOR,
             "timezone": TIMEZONE,
@@ -20,7 +20,11 @@ METADATA = {"author": AUTHOR,
             "num users": "=sum({1}:{1})", # format later
             "comics sent": "=sum({2}:{2})", # format later
             "MRCN": None, # initialize later
-            "columns": COLUMNS}
+            "columns": COLUMNS,
+            BLANK: BLANK,
+            "sms price": "$0.0075",
+            "mms price": "$0.02"}
+
 
 def get_time():
     TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
@@ -75,27 +79,33 @@ def run_setup():
 
     # NOTE I put this in front of last metadata section because google sheets needs
     #   the sheets created before referencing - references don't automatically update
-    SHEETNAME_FORMAT = "{0}:00-{0}:59"
+    SHEETNAME_FORMAT = "T-{0}{1}"
     DIMENSIONS = (1, 5)
+    sheet_names = []
     for i in range(24):
-        wb.add_worksheet(SHEETNAME_FORMAT.format(i), *DIMENSIONS)
+        sn1 = SHEETNAME_FORMAT.format(str(i).zfill(2), '00')
+        sn2 = SHEETNAME_FORMAT.format(str(i).zfill(2), '30')
+        db_client.WB.add_worksheet(sn1, *DIMENSIONS)
+        db_client.WB.add_worksheet(sn2, *DIMENSIONS)
+        sheet_names.extend([sn1, sn2])
     ########
 
     ###
 
     USERCOUNT_FORMAT = '=COUNTA(INDIRECT(' + C + '{0}&"!A:A"))'
     COMICSSENT_FORMAT = '=SUM(INDIRECT(' + C + '{0}&"!C:C"))'
-    stat_cells_range = (2,N, 25,N+2)
+    START_ROW = 2
+    stat_cells_range = (START_ROW,N, START_ROW+len(sheet_names),N+2)
     stat_cells = get_shaped_range(ws1, stat_cells_range)
-    for i in range(len(stat_cells)):
-        stat_cells[i][0].value = SHEETNAME_FORMAT.format(i)
+    for i in range(len(sheet_names)):
+        stat_cells[i][0].value = sheet_names[i]
         stat_cells[i][1].value = USERCOUNT_FORMAT.format(i+2)
         stat_cells[i][2].value = COMICSSENT_FORMAT.format(i+2)
     ws1.update_cells(sum(stat_cells, []), "USER_ENTERED")
 
 
 def reset():
-    wb = db_client.CLIENT.open(WORKBOOK_NAME)
+    wb = db_client.WB
     wss = wb.worksheets()[1:]
     for ws in wss:
         wb.del_worksheet(ws)
