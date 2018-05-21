@@ -8,10 +8,10 @@ import numpy as np
 import db_client
 import scrape_utils
 
-STAT_START_COL = {"letter": 'E', "number": 5}
+STAT_START_COL = {"letter": 'F', "number": 6}
 AUTHOR = "Matthew Jeng"
 TIMEZONE = "UTC"
-COLUMNS = ["Name", "Phone #", "# Comics Sent", "Comics Sent"]
+COLUMNS = "Name (str), Phone (str), Comics Sent (#), Comics Sent (csv)"
 BLANK = ''
 
 METADATA = {"author": AUTHOR,
@@ -20,9 +20,10 @@ METADATA = {"author": AUTHOR,
             "num users": "=sum({1}:{1})", # format later
             "comics sent": "=sum({2}:{2})", # format later
             "MRCN": None, # initialize later
+            "columns": COLUMNS,
             BLANK: BLANK,
-            "sms price": "$0.0075",
-            "mms price": "$0.02"}
+            "sms price": "0.0075",
+            "mms price": "0.02"}
 
 
 def get_time():
@@ -84,16 +85,14 @@ def run_setup():
     for i in range(24):
         sn1 = SHEETNAME_FORMAT.format(str(i).zfill(2), '00')
         sn2 = SHEETNAME_FORMAT.format(str(i).zfill(2), '30')
-        ws1 = db_client.WB.add_worksheet(sn1, *DIMENSIONS)
-        ws1.append_row(COLUMNS)
-        ws2 = db_client.WB.add_worksheet(sn2, *DIMENSIONS)
-        ws2.append_row(COLUMNS)
+        db_client.WB.add_worksheet(sn1, *DIMENSIONS)
+        db_client.WB.add_worksheet(sn2, *DIMENSIONS)
         sheet_names.extend([sn1, sn2])
     ########
 
     ###
 
-    USERCOUNT_FORMAT = '=COUNTA(INDIRECT(' + C + '{0}&"!A:A")) - 1'
+    USERCOUNT_FORMAT = '=COUNTA(INDIRECT(' + C + '{0}&"!A:A"))'
     COMICSSENT_FORMAT = '=SUM(INDIRECT(' + C + '{0}&"!C:C"))'
     START_ROW = 2
     stat_cells_range = (START_ROW,N, START_ROW+len(sheet_names),N+2)
