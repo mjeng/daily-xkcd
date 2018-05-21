@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>daily xkcd</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
   </head>
 
   <body>
@@ -31,8 +31,7 @@
       </div>
     </div>
 
-    <form action="/some_page.php" method="post">
-    <!-- <form> -->
+    <form method="POST">
       <div class="inputs">
         Phone #: <input id="phone" type="text" name="phone"><br>
         Time* (PST):
@@ -174,7 +173,7 @@
 
     <div class="logo">
       <a target="_blank" href="https://xkcd.com/">
-        <img src="imgs/xkcd-logo.png" alt="xkcd logo">
+        <img src="{{url_for('static', filename='xkcd-logo.png')}}" alt="xkcd logo">
       </a>
     </div>
 
