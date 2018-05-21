@@ -1,8 +1,8 @@
 import sys
 from time import strftime, gmtime
 import numpy as np
-import client
-from client import WORKBOOK_NAME
+import db_client
+from db_client import WORKBOOK_NAME
 
 def get_time():
     TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
@@ -35,19 +35,19 @@ def get_shaped_range(ws, r):
 
 def run_setup():
     try:
-        wbs = client.CLIENT.openall()
+        wbs = db_client.CLIENT.openall()
         assert len(wbs) == 0, "Workbooks already exist"
     except AssertionError as e:
         print(e)
         print(wbs)
 
     # NOTE it's possible to create multiple workbooks of the same name (not same of worksheets)
-    # TODO change back the client.CLIENT.create()
-    wb = client.CLIENT.open(WORKBOOK_NAME)
+    # TODO change back the db_client.CLIENT.create()
+    wb = db_client.CLIENT.open(WORKBOOK_NAME)
 
     # # retrieve workbook
     # try:
-    #     wb = client.CLIENT.open(WORKBOOK_NAME)
+    #     wb = db_client.CLIENT.open(WORKBOOK_NAME)
     # except gspread.exceptions.SpreadsheetNotFound:
     #     # TODO report error somehow when server is setup
 
@@ -105,20 +105,25 @@ def run_setup():
 
 # NOTE only run during testing phase
 def reset():
-    wb = client.CLIENT.open(WORKBOOK_NAME)
+    wb = db_client.CLIENT.open(WORKBOOK_NAME)
     wss = wb.worksheets()[1:]
     for ws in wss:
         wb.del_worksheet(ws)
     wb.sheet1.clear()
 
 # NOTE Doesn't run if not specifically running setup - file should only be run once.
-#      If imported and not specifically run, name will be "setup" not "__main__"
+#      If imported, name will not be "__main__"
 if __name__ == "__main__":
-    arg = sys.argv[1]
-    if arg == "--run" or arg == "-r":
-        run_setup()
-    elif arg == "--clean" or arg == "-c":
-        reset()
+    try:
+        arg = sys.argv[1]
+        if arg == "--run" or arg == "-r":
+            run_setup()
+        elif arg == "--clean" or arg == "-c":
+            reset()
+        else:
+            print("Please use tags --run [-r] or --clean [-c]")
+    except IndexError as e:
+        print("IndexError: No argument given")
 
 # TODO move this somewhere useful
 # try:

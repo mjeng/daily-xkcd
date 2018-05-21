@@ -1,10 +1,10 @@
-from twilio.rest import Client
+import twilio.rest
 
-class MyClient:
+class ClientWrapper:
 
     def __init__(self, account_sid, auth_token, my_num):
         assert isinstance(my_num, str), "Sender must be a number converted to string"
-        self.client = Client(account_sid, auth_token)
+        self.client = twilio.rest.Client(account_sid, auth_token)
         self.num = my_num
 
     def send_sms(self, dest_num, message):

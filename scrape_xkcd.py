@@ -9,22 +9,29 @@ from utils import *
 PROJECT_PATH = ""
 
 def execute_task(user_file, client, send_to):
+    #################
+    # TODO
     f = open(user_file, 'r')
     comics_left = list(f.readlines())
     f.close()
+    #################
 
     if comics_left == []:
+        # TODO
         sys.exit("sent every available comic :O")
 
     comic_choice = random.choice(comics_left)
     comics_left.remove(comic_choice)
     comic_num = int(comic_choice)
 
+    #################
+    # TODO
     # write updated list back to file
     f = open(user_file, 'w')
     for comic in comics_left:
         f.write(comic)
     f.close()
+    #################
 
     img_url = find_comic(comic_num)
     img_caption = find_comic_caption(comic_num)

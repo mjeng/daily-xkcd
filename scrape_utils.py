@@ -5,8 +5,8 @@ import re
 MAIN_SITE = "https://xkcd.com/"
 
 def most_recent_comic_num():
-    main_website = "https://xkcd.com/"
-    page = urlopen(main_website)
+
+    page = urlopen(MAIN_SITE)
 
     # Whole document
     soup = BeautifulSoup(page, 'html.parser')
@@ -19,9 +19,9 @@ def most_recent_comic_num():
     perm_link = middle_container.find("br").next_sibling
 
     # Regex to get number out of perm_link
-    regex_str = main_website + ".*/"
+    regex_str = MAIN_SITE + ".*/"
     match = re.search(regex_str, perm_link)
-    comic_num = match.group(0)[len(main_website):][:-1]
+    comic_num = match.group(0)[len(MAIN_SITE):][:-1]
 
     return int(comic_num)
 

@@ -4,8 +4,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # use creds to create a client to interact with the Google Drive API
 _SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+_RELPATH = __file__[:-__file__[::-1].find("/")]
 
-_CREDS = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', _SCOPE)
+# TODO: change to config var
+_CREDS = ServiceAccountCredentials.from_json_keyfile_name(_RELPATH + "client_secret.json", _SCOPE)
 CLIENT = gspread.authorize(_CREDS)
 
 WORKBOOK_NAME = "daily-xkcd user info"

@@ -1,8 +1,8 @@
-import client
-from client import WORKBOOK_NAME
+import db_client
+from db_client import WORKBOOK_NAME
 
 # Find a workbook by name
-wb = client.CLIENT.open(WORKBOOK_NAME)
+wb = db_client.CLIENT.open(WORKBOOK_NAME)
 ws1 = wb.sheet1
 
 # i = 0
