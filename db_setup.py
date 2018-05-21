@@ -4,8 +4,7 @@
 
 import sys
 from time import strftime, gmtime
-import numpy as np
-import db_client
+import db_client, db_utils
 import scrape_utils
 
 STAT_START_COL = {"letter": 'F', "number": 6}
@@ -38,11 +37,6 @@ def initialize_metadata():
     METADATA["comics sent"] = METADATA["comics sent"].format(*letters)
     METADATA["MRCN"] = scrape_utils.most_recent_comic_num()
 
-def get_shaped_range(ws, r):
-    dim = (r[2]-r[0]+1, r[3]-r[1]+1)
-    arr = np.array(ws.range(*r)).reshape(*dim)
-    return [list(a) for a in arr]
-
 def run_setup():
 
     # CREATE SHEETS
@@ -51,7 +45,7 @@ def run_setup():
     ws.update_title("metadata")
 
     MD_RANGE = (1, 1, len(METADATA), 2)
-    md_cells = get_shaped_range(ws, MD_RANGE)
+    md_cells = db_utils.get_shaped_range(ws, MD_RANGE)
 
     initialize_metadata()
     md_items = list(METADATA.items())
@@ -59,7 +53,7 @@ def run_setup():
     for i in range(len(md_cells)):
         md_cells[i][0].value = md_items[i][0]
         md_cells[i][1].value = md_items[i][1]
-    ws.update_cells(sum(md_cells, []), "USER_ENTERED")
+    ws.update_cells(db_utils.flatten(md_cells), "USER_ENTERED")
 
     ###
 
@@ -96,12 +90,12 @@ def run_setup():
     COMICSSENT_FORMAT = '=SUM(INDIRECT(' + C + '{0}&"!C:C"))'
     START_ROW = 2
     stat_cells_range = (START_ROW,N, START_ROW+len(sheet_names),N+2)
-    stat_cells = get_shaped_range(ws, stat_cells_range)
+    stat_cells = db_utils.get_shaped_range(ws, stat_cells_range)
     for i in range(len(sheet_names)):
         stat_cells[i][0].value = sheet_names[i]
         stat_cells[i][1].value = USERCOUNT_FORMAT.format(i+2)
         stat_cells[i][2].value = COMICSSENT_FORMAT.format(i+2)
-    ws.update_cells(sum(stat_cells, []), "USER_ENTERED")
+    ws.update_cells(db_utils.flatten(stat_cells), "USER_ENTERED")
 
 
 def reset():
