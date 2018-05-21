@@ -46,7 +46,7 @@ def check_url(img_url):
 
     return True
 
-def find_comic(comic_num):
+def find_comic_url(comic_num):
     page_url = MAIN_SITE + str(comic_num) + "/"
     page = urlopen(page_url)
     soup = BeautifulSoup(page, 'html.parser')

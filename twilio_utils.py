@@ -61,7 +61,7 @@ class MMS:
         self.message = ''
         self.updated = False
 
-    def update(url, caption):
+    def update(self, url, caption):
 
         assert bool(url), "URL must have a value"
 
