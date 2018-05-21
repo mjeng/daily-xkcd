@@ -10,8 +10,22 @@ send_to = f.readline()[:-1]
 send_from = f.readline()[:-1]
 f.close()
 
+CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscribed " \
+    + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
+    + "STOP if you don't want to receive messages anymore!"
+
+
 def add_db_entry(name, number, timestr):
     db_utils.add_entry(name, number, timestr)
+
+
+def send_sub_confirmation(name, number, time):
+
+    sms = twilio_utils.SMS(number, CONFIRMATION_FORMAT.format(name, time))
+
+    twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
+    twilio_client.send_sms(sms)
+
 
 def run_once(name, number):
 

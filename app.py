@@ -14,7 +14,8 @@ def homepage():
     if request.method == "POST":
         name = request.form["name"]
         number = request.form["phone"]
-        timestr = server_utils.parse_validate_time(request.form["time"])
+        time = request.form["time"]
+        timestr = server_utils.parse_validate_time(time)
         submit_type = request.form["submit_type"]
 
         if submit_type == server_utils.TRY:
@@ -22,6 +23,7 @@ def homepage():
             return render_template("try.html", number=number)
         if submit_type == server_utils.SUB:
             router.add_db_entry(name, number, timestr)
+            router.send_sub_confirmation(name, number, time)
             return render_template("sub.html", name=name)
 
     return render_template("index.html")
