@@ -5,6 +5,7 @@ TRY = "try it"
 SUB = "submit"
 
 TIME_FORMAT = "^[0-9]{2}:[0-9]{2} [AP]M"
+FORMAT_LENGTH = 8
 HOURS = [str(i+1).zfill(2) for i in range(12)]
 MINUTES = ['00', '30']
 AM = 'AM'
@@ -25,12 +26,13 @@ def parse_validate_time(time):
     AssertionError
     """
 
-    res = re.findall(TIME_FORMAT, time)
+    res = re.findall(TIME_FORMAT, time.zfill(FORMAT_LENGTH))
     assert len(res) == 1, "Issue with time format"
+    raw = res[0]
 
-    hours = res[0:2]
-    minutes = res[3:5]
-    ampm = res[6:8]
+    hours = raw[0:2]
+    minutes = raw[3:5]
+    ampm = raw[6:8]
 
     assert hours in HOURS, "Corrupted input"
     assert minutes in MINUTES, "Corrupted input"
