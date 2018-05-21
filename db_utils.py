@@ -7,6 +7,9 @@ SHEET_NAMES = [ws.title for ws in db_client.WB.worksheets()] # TODO: update
 MRCN_CELL = "B6"
 
 ############### HELPERS ###############
+def time2sheet(timestr):
+    return "T-" + timestr
+
 def get_shaped_range(ws, r):
     dim = (r[2]-r[0]+1, r[3]-r[1]+1)
     arr = np.array(ws.range(*r)).reshape(*dim)
@@ -93,3 +96,9 @@ def retrieve_mms_list(sheet_name):
 
     return mms_list
 #######################################
+
+############### SECONDARY ###############
+def add_entry(name, number, timestr):
+    sheet_name = time2sheet(timestr)
+    ws = WB.worksheet(sheet_name)
+    ws.append_row(name, number, 0, '')
