@@ -1,0 +1,27 @@
+There are three main sections to this project: The MMS client (Twilio), the web scraping module (BeautifulSoup), and the database (Google Sheets). Each file in this project was written to be readable, well-abstracted, robust, and scalable, although I have no current plans to scale up this project.
+
+--MMS client-- (twilio_utils.py)
+The MMS client is powered by Twilio. Using Twilio's REST API, we can create twilio.rest.Client objects that contain a set of authenticated Twilio credentials. I made a wrapper class (called ClientWrapper) to create objects containing this client, the phone number we want to use to send messages, and abstracted methods to simplify the process of sending messages.
+
+--web scraping module-- (scrape_utils.py)
+We use BeautifulSoup to scrape the xkcd website's subdomains (https://xkcd.com/*) for image urls and captions, which are later sent to the MMS client to compose and send.
+
+--database-- (db_client.py, db_utils.py, db_setup.py)
+Since this is meant to be a lightweight project, I've gone with Google Sheets as a lightweight database. I'm using the gspread and oauth2client libraries to communicate with the Google Sheets API. My sheet
+
+
+~some interesting notes on my database~
+1. "lightweight database" - the cell cap for a single Google Sheets workbook is 2,000,000 and I use 6 cells per user => I can support >300,000 users.
+2. On my free plan for the Google Sheets API, I'm allotted 100 requests every 100 seconds. This might seem like an issue for scalability at first, but in fact it's not - I use batch queries and batch updates. Instead of updating cell-by-cell, I pull all the cells I need, update them locally, and send them back as one request, totaling two requests (+ misc requests for metadata checks) per update, which I only need to do once every 15-30 minutes.
+3. Currently, the process for choosing a comic for a user is to randomly select one and check if it's been sent to the user before - repeat if necessary. The probability of selecting an unused comic here follows a geometric distribution with parameter p=(# comics unseen)/(# total comics). With a little math (or googling), we find that the expected number of random samples we need before we find a comic we haven't used yet is 1/p. Currently xkcd has close to 2000 comics available. This means that I'd need to send ~1000 comics to a user before the expected number of samples I'd need for that user reaches just 2. At one comic each day, that's around 3 years before we reach this benchmark. Originally, I was going to convert my list of used comics to a list of unused comics at some benchmark (e.g. maybe when EV > 10), but decided that that would happen > 5 years from now, and by then something else would probably be obsolete or I would probably have a better way to do this whole project, or something else.
+4. I've written a file called db_setup.py that's never called during runtime. It was originally used for development when I needed to quickly teardown/rebuild/recustomize my Google Sheet. I've left it around in case I lose my db and I need to rebuild it, and probably more because it's a nicely written file I'm proud of and I don't want to delete :)
+
+
+--OVERALL-- (incomplete)
+Centralized operations to main.py
+
+The process can be simplified to the following steps:
+1. Heroku Scheduler triggers
+2. (scraper) We retrieve the most recent comic number (mrcn)
+3. (db) Pass the mrcn to the database, update metadata
+4. (db) Request all user
