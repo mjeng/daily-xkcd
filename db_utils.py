@@ -1,26 +1,13 @@
 import db_client
 from db_client import WORKBOOK_NAME
 
-# Find a workbook by name
-wb = db_client.CLIENT.open(WORKBOOK_NAME)
-ws1 = wb.sheet1
+MRCN_CELL = "B6"
 
-# i = 0
-# for ws in wss:
-#     i += 1
-#     try:
-#         print(i)
-#         ss.del_worksheet(ws)
-#     except gspread.exceptions.APIError:
-#         time.sleep(10)
-#
-#
-# def insert_row(sheet, row):
-#     sheet.append_row(row)
+def update_mrcn(new_mrcn):
 
-# try:
-#     for i in range(200):
-#         contents = ["bloop"] * 20
-#         sheet.append_row([i] + contents)
-# except gspread.exceptions.APIError:
-#     print("blep")
+    assert type(new_mrcn) == int, "new_mrcn not of type int; has value {0}".format(new_mrcn)
+    ws1 = db_client.WB.sheet1
+    curr_mrcn = int(ws1.acell(MRCN_CELL).numeric_value())
+
+    if curr_mrcn != new_mrcn:
+        ws1.update_acell(MRCN_CELL, new_mrcn)

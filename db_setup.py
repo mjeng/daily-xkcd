@@ -1,12 +1,13 @@
+# NOTE: run with one of the following:
+#   python3 setup.py --run
+#   python3 setup.py --clean
+
 import sys
 from time import strftime, gmtime
 import numpy as np
 import db_client
 from db_client import WORKBOOK_NAME
-
-def get_time():
-    TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
-    return strftime(TIME_FORMAT, gmtime())
+import scrape_utils
 
 STAT_START_COL = {"letter": 'G', "number": 7}
 AUTHOR = "Matthew Jeng"
@@ -18,7 +19,12 @@ METADATA = {"author": AUTHOR,
             "ss-init time": None, # initialize later
             "num users": "=sum({1}:{1})", # format later
             "comics sent": "=sum({2}:{2})", # format later
+            "MRCN": None, # initialize later
             "columns": COLUMNS}
+
+def get_time():
+    TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
+    return strftime(TIME_FORMAT, gmtime())
 
 def initialize_metadata():
     METADATA["ss-init time"] = get_time()
@@ -26,35 +32,18 @@ def initialize_metadata():
     letters = [c, chr(ord(c["letter"]) + 1), chr(ord(c["letter"]) + 2)]
     METADATA["num users"] = METADATA["num users"].format(*letters)
     METADATA["comics sent"] = METADATA["comics sent"].format(*letters)
+    METADATA["MRCN"] = scrape_utils.most_recent_comic_num()
 
 def get_shaped_range(ws, r):
     dim = (r[2]-r[0]+1, r[3]-r[1]+1)
     arr = np.array(ws.range(*r)).reshape(*dim)
     return [list(a) for a in arr]
 
-
 def run_setup():
-    try:
-        wbs = db_client.CLIENT.openall()
-        assert len(wbs) == 0, "Workbooks already exist"
-    except AssertionError as e:
-        print(e)
-        print(wbs)
-
-    # NOTE it's possible to create multiple workbooks of the same name (not same of worksheets)
-    # TODO change back the db_client.CLIENT.create()
-    wb = db_client.CLIENT.open(WORKBOOK_NAME)
-
-    # # retrieve workbook
-    # try:
-    #     wb = db_client.CLIENT.open(WORKBOOK_NAME)
-    # except gspread.exceptions.SpreadsheetNotFound:
-    #     # TODO report error somehow when server is setup
-
 
     # CREATE SHEETS
     # metadata sheet
-    ws1 = wb.sheet1
+    ws1 = db_client.WB.sheet1
     ws1.update_title("metadata")
 
     MD_RANGE = (1, 1, len(METADATA), 2)
@@ -81,14 +70,16 @@ def run_setup():
 
     ###
 
-    SHEETNAME_FORMAT = "{0}:00-{0}:59"
+    ########
     # data sheets
-    # NOTE I put this in front of last metadata section because google sheets
-    #   needs the sheets created before referencing - references don't automatically
-    #   update
+
+    # NOTE I put this in front of last metadata section because google sheets needs
+    #   the sheets created before referencing - references don't automatically update
+    SHEETNAME_FORMAT = "{0}:00-{0}:59"
     DIMENSIONS = (1, 5)
     for i in range(24):
         wb.add_worksheet(SHEETNAME_FORMAT.format(i), *DIMENSIONS)
+    ########
 
     ###
 
@@ -103,7 +94,6 @@ def run_setup():
     ws1.update_cells(sum(stat_cells, []), "USER_ENTERED")
 
 
-# NOTE only run during testing phase
 def reset():
     wb = db_client.CLIENT.open(WORKBOOK_NAME)
     wss = wb.worksheets()[1:]
@@ -111,8 +101,8 @@ def reset():
         wb.del_worksheet(ws)
     wb.sheet1.clear()
 
-# NOTE Doesn't run if not specifically running setup - file should only be run once.
-#      If imported, name will not be "__main__"
+# NOTE: Doesn't run if not specifically running setup - file should only be run once.
+#       If imported, name will not be "__main__".
 if __name__ == "__main__":
     try:
         arg = sys.argv[1]
@@ -124,12 +114,3 @@ if __name__ == "__main__":
             print("Please use tags --run [-r] or --clean [-c]")
     except IndexError as e:
         print("IndexError: No argument given")
-
-# TODO move this somewhere useful
-# try:
-#     # in the case that credentials expire
-#     wb.sheet1
-# except gspread.exceptions.APIError as e:
-#     # TODO replace with console reporting
-#     # TODO refresh credentials
-#     print(e)
