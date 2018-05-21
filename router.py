@@ -1,7 +1,9 @@
 import os
 import twilio_utils, scrape_utils, db_utils
-import scrape_xkcd
+import random
 
+def add_db_entry(name, number, timestr):
+    db_utils.add_entry(name, number, timestr)
 
 # NOTE: runs periodically vis-a-vis heroku scheduler
 def run():
@@ -20,5 +22,5 @@ def run():
     twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
 
 
-if __name__ == "__main__":
-    run()
+# if __name__ == "__main__":
+#     run()
