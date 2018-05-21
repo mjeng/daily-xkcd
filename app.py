@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
-@app.route("/", methods=["POST"])
+@app.route("/", methods=["GET", "POST"])
 def homepage():
     # assert request.method == "POST" # not sure if this works
     print("we here")
