@@ -8,10 +8,10 @@ import numpy as np
 import db_client
 import scrape_utils
 
-STAT_START_COL = {"letter": 'G', "number": 7}
+STAT_START_COL = {"letter": 'E', "number": 5}
 AUTHOR = "Matthew Jeng"
 TIMEZONE = "UTC"
-COLUMNS = "name, phone (xxxyyyzzzz), num comics drawn (#), last mrcn (#), comics-seen (x,x,x,..)"
+COLUMNS = ["Name", "Phone #", "# Comics Sent", "Comics Sent"]
 BLANK = ''
 
 METADATA = {"author": AUTHOR,
@@ -20,7 +20,6 @@ METADATA = {"author": AUTHOR,
             "num users": "=sum({1}:{1})", # format later
             "comics sent": "=sum({2}:{2})", # format later
             "MRCN": None, # initialize later
-            "columns": COLUMNS,
             BLANK: BLANK,
             "sms price": "$0.0075",
             "mms price": "$0.02"}
@@ -47,11 +46,11 @@ def run_setup():
 
     # CREATE SHEETS
     # metadata sheet
-    ws1 = db_client.WB.sheet1
-    ws1.update_title("metadata")
+    ws = db_client.WB.sheet1
+    ws.update_title("metadata")
 
     MD_RANGE = (1, 1, len(METADATA), 2)
-    md_cells = get_shaped_range(ws1, MD_RANGE)
+    md_cells = get_shaped_range(ws, MD_RANGE)
 
     initialize_metadata()
     md_items = list(METADATA.items())
@@ -59,18 +58,18 @@ def run_setup():
     for i in range(len(md_cells)):
         md_cells[i][0].value = md_items[i][0]
         md_cells[i][1].value = md_items[i][1]
-    ws1.update_cells(sum(md_cells, []), "USER_ENTERED")
+    ws.update_cells(sum(md_cells, []), "USER_ENTERED")
 
     ###
 
     N = STAT_START_COL["number"]
     C = STAT_START_COL["letter"]
 
-    stathead_cells = ws1.range(1,N, 1,N+2)
+    stathead_cells = ws.range(1,N, 1,N+2)
     stathead_cells[0].value = "ws"
     stathead_cells[1].value = "user count"
     stathead_cells[2].value = "comics sent"
-    ws1.update_cells(stathead_cells)
+    ws.update_cells(stathead_cells)
 
     ###
 
@@ -80,28 +79,30 @@ def run_setup():
     # NOTE I put this in front of last metadata section because google sheets needs
     #   the sheets created before referencing - references don't automatically update
     SHEETNAME_FORMAT = "T-{0}{1}"
-    DIMENSIONS = (1, 5)
+    DIMENSIONS = (1, 4)
     sheet_names = []
     for i in range(24):
         sn1 = SHEETNAME_FORMAT.format(str(i).zfill(2), '00')
         sn2 = SHEETNAME_FORMAT.format(str(i).zfill(2), '30')
-        db_client.WB.add_worksheet(sn1, *DIMENSIONS)
-        db_client.WB.add_worksheet(sn2, *DIMENSIONS)
+        ws1 = db_client.WB.add_worksheet(sn1, *DIMENSIONS)
+        ws1.append_row(COLUMNS)
+        ws2 = db_client.WB.add_worksheet(sn2, *DIMENSIONS)
+        ws2.append_row(COLUMNS)
         sheet_names.extend([sn1, sn2])
     ########
 
     ###
 
-    USERCOUNT_FORMAT = '=COUNTA(INDIRECT(' + C + '{0}&"!A:A"))'
+    USERCOUNT_FORMAT = '=COUNTA(INDIRECT(' + C + '{0}&"!A:A")) - 1'
     COMICSSENT_FORMAT = '=SUM(INDIRECT(' + C + '{0}&"!C:C"))'
     START_ROW = 2
     stat_cells_range = (START_ROW,N, START_ROW+len(sheet_names),N+2)
-    stat_cells = get_shaped_range(ws1, stat_cells_range)
+    stat_cells = get_shaped_range(ws, stat_cells_range)
     for i in range(len(sheet_names)):
         stat_cells[i][0].value = sheet_names[i]
         stat_cells[i][1].value = USERCOUNT_FORMAT.format(i+2)
         stat_cells[i][2].value = COMICSSENT_FORMAT.format(i+2)
-    ws1.update_cells(sum(stat_cells, []), "USER_ENTERED")
+    ws.update_cells(sum(stat_cells, []), "USER_ENTERED")
 
 
 def reset():
