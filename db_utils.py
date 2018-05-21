@@ -100,5 +100,6 @@ def retrieve_mms_list(sheet_name):
 ############### SECONDARY ###############
 def add_entry(name, number, timestr):
     sheet_name = time2sheet(timestr)
-    ws = WB.worksheet(sheet_name)
-    ws.append_row(name, number, 0, '')
+    ws = db_client.WB.worksheet(sheet_name)
+    ws.append_row([name, number, 0, ''])
+#########################################
