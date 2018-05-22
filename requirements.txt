@@ -5,3 +5,4 @@ twilio
 gspread
 google-auth
 bs4
+numpy
