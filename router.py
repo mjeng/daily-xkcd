@@ -14,16 +14,21 @@ CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscri
     + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
     + "STOP if you don't want to receive messages anymore!"
 
+twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
 
 def add_db_entry(name, number, timestr):
-    db_utils.add_entry(name, number, timestr)
+    # the number should already be validated by the server-side checks
+    pnc = twilio_client.lookups.phone_numbers(number)
+    pni = pnc.fetch()
+    pn = pni.phone_number
+
+    db_utils.add_entry(name, pn, timestr)
 
 
 def send_sub_confirmation(name, number, time):
 
     sms = twilio_utils.SMS(number, CONFIRMATION_FORMAT.format(name, time))
 
-    twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
     twilio_client.send_sms(sms)
 
 
@@ -39,7 +44,6 @@ def run_once(name, number):
 
     mms.update(comic_url, caption)
 
-    twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
     twilio_client.send_mms(mms)
 
 
@@ -57,7 +61,6 @@ def run():
     # TODO: call scraper and replace all comic #s with comic url and add in caption
 
     # TODO: call twilio and send all comics to phone # with greeting + caption
-    twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
 
 
 # if __name__ == "__main__":
