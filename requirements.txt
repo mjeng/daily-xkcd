@@ -3,5 +3,5 @@ gunicorn
 Jinja2
 twilio
 gspread
-oauth2client
+google-auth
 bs4

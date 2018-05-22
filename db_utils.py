@@ -5,7 +5,7 @@ import random
 
 
 ###############################################
-SHEET_NAMES = [ws.title for ws in db_client.WB.worksheets()] # TODO: update
+SHEET_NAMES = [ws.title for ws in db_client.wb.worksheets()] # TODO: update
 MRCN_CELL = "B6"
 ###############################################
 
@@ -49,7 +49,7 @@ def find_comic_num(mrcn, list_sent):
 def update_mrcn(new_mrcn):
 
     assert type(new_mrcn) == int, "new_mrcn not of type int; has value {0}".format(new_mrcn)
-    ws1 = db_client.WB.sheet1
+    ws1 = db_client.wb.sheet1
     curr_mrcn = int(ws1.acell(MRCN_CELL).numeric_value())
 
     if curr_mrcn != new_mrcn:
@@ -57,11 +57,11 @@ def update_mrcn(new_mrcn):
 
 
 def retrieve_mms_list(sheet_name):
-    wss = db_client.WB.worksheets()
+    wss = db_client.wb.worksheets()
     sheet_names = [ws.title for ws in wss]
     assert sheet_name in sheet_names, "Invalid sheet_name"
 
-    ws = db_client.WB.worksheet(sheet_name)
+    ws = db_client.wb.worksheet(sheet_name)
     if ws.get_all_values() == []:
         return []
 
@@ -75,7 +75,7 @@ def retrieve_mms_list(sheet_name):
     print("row count =", ws.row_count)
     print("cells\n", cells)
 
-    mrcn = db_client.WB.sheet1.acell(MRCN_CELL)
+    mrcn = db_client.wb.sheet1.acell(MRCN_CELL)
     mms_list = []
     for i, row in enumerate(cells):
         name = row[0].value
@@ -104,6 +104,6 @@ def retrieve_mms_list(sheet_name):
 ############### SECONDARY ###############
 def add_entry(name, number, timestr):
     sheet_name = time2sheet(timestr)
-    ws = db_client.WB.worksheet(sheet_name)
+    ws = db_client.wb.worksheet(sheet_name)
     ws.append_row([name, number, 0, ''])
 #########################################

@@ -44,7 +44,7 @@ def run_setup():
 
     # CREATE SHEETS
     # metadata sheet
-    ws = db_client.WB.sheet1
+    ws = db_client.wb.sheet1
     ws.update_title("metadata")
 
     MD_RANGE = (1, 1, len(METADATA), 2)
@@ -82,8 +82,8 @@ def run_setup():
     for i in range(24):
         sn1 = SHEETNAME_FORMAT.format(str(i).zfill(2), '00')
         sn2 = SHEETNAME_FORMAT.format(str(i).zfill(2), '30')
-        db_client.WB.add_worksheet(sn1, *DIMENSIONS)
-        db_client.WB.add_worksheet(sn2, *DIMENSIONS)
+        db_client.wb.add_worksheet(sn1, *DIMENSIONS)
+        db_client.wb.add_worksheet(sn2, *DIMENSIONS)
         sheet_names.extend([sn1, sn2])
     ########
 
@@ -102,7 +102,7 @@ def run_setup():
 
 
 def reset():
-    wb = db_client.WB
+    wb = db_client.wb
     wss = wb.worksheets()[1:]
     for ws in wss:
         wb.del_worksheet(ws)
