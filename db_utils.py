@@ -5,7 +5,7 @@ import random
 
 
 ###############################################
-SHEET_NAMES = [ws.title for ws in db_client.wb.worksheets()] # TODO: update
+METADATA = "metadata"
 MRCN_CELL = "B6"
 ###############################################
 
@@ -50,15 +50,17 @@ def update_mrcn(new_mrcn):
 
     assert type(new_mrcn) == int, "new_mrcn not of type int; has value {0}".format(new_mrcn)
     ws1 = db_client.wb.sheet1
-    curr_mrcn = int(ws1.acell(MRCN_CELL).numeric_value())
+    curr_mrcn = int(ws1.acell(MRCN_CELL).numeric_value)
 
     if curr_mrcn != new_mrcn:
         ws1.update_acell(MRCN_CELL, new_mrcn)
 
 
-def retrieve_mms_list(sheet_name):
-    wss = db_client.wb.worksheets()
+def retrieve_mms_list(timestr):
+    sheet_name = time2sheet(timestr)
+    wss = db_client.wb.worksheets()[1:] # First worksheet is metadata
     sheet_names = [ws.title for ws in wss]
+    assert METADATA not in sheet_names, "Order of database sheets mixed up"
     assert sheet_name in sheet_names, "Invalid sheet_name"
 
     ws = db_client.wb.worksheet(sheet_name)
