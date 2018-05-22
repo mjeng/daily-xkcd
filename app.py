@@ -2,9 +2,6 @@ from flask import Flask, request, render_template
 import server_utils
 import router
 
-import os
-print("DOES THIS GO TO THE LOG?")
-print(os.environ)
 
 ###############################################
 SERVER_ERR_MSGS = {

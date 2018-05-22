@@ -7,6 +7,8 @@ from time import strftime, gmtime
 import db_client, db_utils
 import scrape_utils
 
+
+###############################################
 STAT_START_COL = {"letter": 'F', "number": 6}
 AUTHOR = "Matthew Jeng"
 TIMEZONE = "UTC"
@@ -23,6 +25,7 @@ METADATA = {"author": AUTHOR,
             BLANK: BLANK,
             "sms price": "0.0075",
             "mms price": "0.02"}
+###############################################
 
 
 def get_time():

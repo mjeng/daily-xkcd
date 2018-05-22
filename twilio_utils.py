@@ -2,7 +2,6 @@ import twilio.rest
 import random
 
 
-# NOTE: not using this class
 class SMS:
 
     def __init__(self, phone_num, message):

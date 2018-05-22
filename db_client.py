@@ -1,8 +1,3 @@
-import os
-print("DOES THIS GO TO THE LOG?")
-print(os.environ)
-
-
 # cell limit in workbook is 2,000,000
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -28,8 +23,8 @@ try:
     WB = CLIENT.open(WORKBOOK_NAME)
 except gspread.exceptions.SpreadsheetNotFound as e:
     # TODO: report error
-    print(e)
     print("workbook doesn't exist??")
+    raise e
 
 # in class authentication times out
 def reload_client():

@@ -2,23 +2,30 @@ import os
 import twilio_utils, scrape_utils, db_utils
 import random
 
+# # TODO: temporary; replace with heroku config
+# f = open("private.txt", 'r')
+# account_sid = f.readline()[:-1] # to get rid of \n
+# auth_token = f.readline()[:-1]
+# send_to = f.readline()[:-1]
+# send_from = f.readline()[:-1]
+# f.close()
 
-print("DOES THIS GO TO THE LOG? ROUTER.PY")
-print(os.environ)
-
-# TODO: temporary; replace with heroku config
-f = open("private.txt", 'r')
-account_sid = f.readline()[:-1] # to get rid of \n
-auth_token = f.readline()[:-1]
-send_to = f.readline()[:-1]
-send_from = f.readline()[:-1]
-f.close()
-
+###############################################
 CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscribed " \
     + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
     + "STOP if you don't want to receive messages anymore!"
 
-twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
+SID = os.environ["TWILIO_SID"]
+TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+NUMBER = os.environ["TWILIO_NUMBER"]
+
+twilio_client = twilio_utils.ClientWrapper(SID, TOKEN, NUMBER)
+
+del SID
+del TOKEN
+del NUMBER
+###############################################
+
 
 def add_db_entry(name, number, timestr):
     # the number should already be validated by the server-side checks

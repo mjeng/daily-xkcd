@@ -2,7 +2,11 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
 
+
+###############################################
 MAIN_SITE = "https://xkcd.com/"
+###############################################
+
 
 def most_recent_comic_num():
 
