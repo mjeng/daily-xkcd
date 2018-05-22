@@ -60,7 +60,7 @@ def run_once(name, number):
 
 # called periodically by clock dyno
 def run(timestr):
-    server_utils.report("RUNNING with timestr", timestr)
+    server_utils.report("RUNNING with timestr" + timestr)
     # Retrieve most_recent_comic_num
     mrcn = scrape_utils.most_recent_comic_num()
 
