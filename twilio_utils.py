@@ -104,6 +104,7 @@ class ClientWrapper:
             from_=self.num,
             body=sms.message
         )
+        server_utils.report("Sent SMS with body: {0}".format(sms.message))
 
     def send_mms(self, mms):
         assert isinstance(mms, MMS), "mms needs to be an MMS object"
@@ -115,3 +116,4 @@ class ClientWrapper:
             body=mms.message,
             media_url=mms.comic_url
         )
+        server_utils.report("Sent MMS to {0} with media {0} and body: {1}".format(mms.name, mms.comic_url, mms.message))

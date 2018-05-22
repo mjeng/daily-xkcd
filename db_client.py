@@ -5,8 +5,6 @@ from google.auth.transport.requests import AuthorizedSession
 
 def setup_db():
     global wb
-    # _service_account_info = json.load(open("client_secret.json"))
-    # _spreadsheetId = '1WA3fo_5YPfwMVp9lVety6fiEn184iss2TeE_UAEqF6A'
     _service_account_info = json.loads(os.environ["GOOGLE_AUTH"])
     _spreadsheetId = os.environ["WB_ID"]
     _scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']

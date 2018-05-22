@@ -1,6 +1,7 @@
 import re
 import twilio.base.exceptions
 
+
 ###############################################
 TRY = "try it"
 SUB = "submit"
@@ -19,6 +20,7 @@ NUM_ERR = 2
 TIME_ERR = 3
 SUBMIT_ERR = 4
 ###############################################
+
 
 # NOTE: turns out you can change the values of the select box before submission
 #   so validating to make sure it's one of the options provided

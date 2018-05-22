@@ -2,14 +2,6 @@ import os
 import twilio_utils, scrape_utils, db_utils, server_utils
 import random
 
-# # TODO: temporary; replace with heroku config
-# f = open("private.txt", 'r')
-# SID = f.readline()[:-1] # to get rid of \n
-# TOKEN = f.readline()[:-1]
-# send_to = f.readline()[:-1]
-# NUMBER = f.readline()[:-1]
-# f.close()
-# twilio_client = twilio_utils.ClientWrapper(SID, TOKEN, NUMBER)
 
 ###############################################
 CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscribed " \
@@ -61,7 +53,9 @@ def run_once(name, number):
 
 # called periodically by clock dyno
 def run(timestr):
+
     server_utils.report("RUNNING with timestr " + timestr)
+
     # Retrieve most_recent_comic_num
     mrcn = scrape_utils.most_recent_comic_num()
 
@@ -74,11 +68,21 @@ def run(timestr):
 
     # Call scraper and replace all comic #s with comic url and add in caption
     for mms in mms_list:
-        comic_num = mms.comic_num
-        comic_url = scrape_utils.find_comic_url(comic_num)
-        comic_caption = scrape_utils.find_comic_caption(comic_num)
-        mms.update(comic_url, comic_caption)
+        # If one mms update errors, the others should still send
+        try:
+            comic_num = mms.comic_num
+            comic_url = scrape_utils.find_comic_url(comic_num)
+            comic_caption = scrape_utils.find_comic_caption(comic_num)
+            mms.update(comic_url, comic_caption)
+        except Exception as e:
+            server_utils.report(e)
+            continue
 
     # Call twilio and send all comics to phone # with greeting + caption
     for mms in mms_list:
-        twilio_client.send_mms(mms)
+        # If one message sent errors, the others should still send
+        try:
+            twilio_client.send_mms(mms)
+        except Exception as e:
+            server_utils.report(e)
+            continue

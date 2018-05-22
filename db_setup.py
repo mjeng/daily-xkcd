@@ -75,7 +75,7 @@ def run_setup():
     ########
     # data sheets
 
-    # NOTE I put this in front of last metadata section because google sheets needs
+    # NOTE: I put this in front of last metadata section because google sheets needs
     #   the sheets created before referencing - references don't automatically update
     SHEETNAME_FORMAT = "T-{0}{1}"
     DIMENSIONS = (1, 4)
