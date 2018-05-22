@@ -1,3 +1,8 @@
+import os
+print("DOES THIS GO TO THE LOG?")
+print(os.environ)
+
+
 # cell limit in workbook is 2,000,000
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
