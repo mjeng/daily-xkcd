@@ -7,6 +7,9 @@ def setup_db():
     global wb
     print(os.environ)
     _service_account_info = json.loads(os.environ["GOOGLE_AUTH"])
+    print(os.environ["GOOGLE_AUTH"])
+    print("\n\n\n\n")
+    print(_service_account_info)
     _scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     _credentials = service_account.Credentials.from_service_account_info(_service_account_info)
     _scoped_credentials = _credentials.with_scopes(_scope)
