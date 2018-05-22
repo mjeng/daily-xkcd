@@ -6,8 +6,14 @@ sched = BlockingScheduler()
 def timed_job():
     print('This job is run every 10s.')
 
-# @sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
-# def scheduled_job():
-#     print('This job is run every weekday at 5pm.')
+@sched.scheduled_job('cron', minute=0, timezone="US/Pacific")
+def scheduled_job():
+    print('This job is run at minute 00.')
 
+@sched.scheduled_job('cron', minute=30, timezone="US/Pacific")
+def scheduled_job():
+    print('This job is run at minute 30.')
+
+print("starting")
 sched.start()
+print("does it ever go here? :0")
