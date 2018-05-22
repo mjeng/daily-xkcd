@@ -2,6 +2,10 @@ import os
 import twilio_utils, scrape_utils, db_utils
 import random
 
+
+print("DOES THIS GO TO THE LOG? ROUTER.PY")
+print(os.environ)
+
 # TODO: temporary; replace with heroku config
 f = open("private.txt", 'r')
 account_sid = f.readline()[:-1] # to get rid of \n
