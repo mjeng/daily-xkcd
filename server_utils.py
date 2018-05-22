@@ -109,3 +109,7 @@ def validate_inputs(name, number, twilio_client, time, submit_type):
     if not validate_submit_type(submit_type):
         return SUBMIT_ERR
     return NO_ERR
+
+# just to have something more official/readable
+def report(str):
+    print(str)

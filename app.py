@@ -34,6 +34,7 @@ def homepage():
             pass
         else:
             err_msg = SERVER_ERR_MSGS[err_code]
+            server_utils.report("Error code {0} with inputs NAME: {1} | NUMBER: {2} | TIME: {3} | SUBMIT_TYPE: {4}".format(err_code, name, number, time, submit_type))
             return render_template("err.html", err_msg=err_msg)
 
         timestr = server_utils.parse_time(time)
@@ -49,4 +50,4 @@ def homepage():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=True)
+    app.run()

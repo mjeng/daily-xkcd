@@ -1,5 +1,5 @@
 import db_client
-import twilio_utils
+import twilio_utils, server_utils
 import numpy as np
 import random
 
@@ -80,7 +80,10 @@ def retrieve_mms_list(timestr):
     mrcn_cell = db_client.wb.sheet1.acell(MRCN_CELL)
     mrcn = int(mrcn_cell.value)
     mms_list = []
-    for row in cells:
+    for i, row in enumerate(cells):
+        if row[1].value == '' or row[2].value == '':
+            server_utils.report("Row {0} in worksheet {1} missing values".format(i+1, sheet_name))
+            continue
         name = row[0].value
         phone = row[1].value
         num_sent = int(row[2].value)
