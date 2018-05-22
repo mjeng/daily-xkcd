@@ -58,21 +58,26 @@ def run_once(name, number):
     twilio_client.send_mms(mms)
 
 
-# NOTE: runs periodically vis-a-vis heroku scheduler
-def run():
+# called periodically by clock dyno
+def run(timestr):
 
-    # TODO: retrieve most_recent_comic_num
+    # Retrieve most_recent_comic_num
     mrcn = scrape_utils.most_recent_comic_num()
-    # TODO: send to db, update if necessary
+
+    # Send to db, update if necessary
     db_utils.update_mrcn(mrcn)
 
-    # TODO: request users at certain time slot; db should automatically update here
-    #       should receive a list of MMS objects with name, phone #, comic #, (empty) caption
+    # Request users at certain time slot; db should automatically update here
+    # Should receive a list of MMS objects with name, phone #, comic #, (empty) caption
+    mms_list = db_utils.retrieve_mms_list(timestr)
 
-    # TODO: call scraper and replace all comic #s with comic url and add in caption
+    # Call scraper and replace all comic #s with comic url and add in caption
+    for mms in mms_list:
+        comic_num = mms.comic_num
+        comic_url = scrape_utils.find_comic_url(comic_num)
+        comic_caption = scrape_utils.find_comic_caption(comic_num)
+        mms.update(comic_url, caption)
 
-    # TODO: call twilio and send all comics to phone # with greeting + caption
-
-
-# if __name__ == "__main__":
-#     run()
+    # Call twilio and send all comics to phone # with greeting + caption
+    for mms in mms_list:
+        twilio_client.send_mms(mms)
