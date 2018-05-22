@@ -15,15 +15,15 @@ CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscri
     + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
     + "STOP if you don't want to receive messages anymore!"
 
-SID = os.environ["TWILIO_SID"]
-TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
-NUMBER = os.environ["TWILIO_NUMBER"]
+def twilio_setup():
+    global twilio_client
+    SID = os.environ["TWILIO_SID"]
+    TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+    NUMBER = os.environ["TWILIO_NUMBER"]
 
-twilio_client = twilio_utils.ClientWrapper(SID, TOKEN, NUMBER)
+    twilio_client = twilio_utils.ClientWrapper(SID, TOKEN, NUMBER)
 
-del SID
-del TOKEN
-del NUMBER
+twilio_setup()
 ###############################################
 
 

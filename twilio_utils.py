@@ -15,12 +15,13 @@ class SMS:
 class MMS:
 
     CAPTION_NAME = [
-        "Hi {0}! Here's your xkcd comic caption:\n{1}",
+        "Hi {0}! Here's your xkcd comic:\n{1}",
         "Here you go {0}:\n{1}"
     ]
     CAPTION = [
         "{1}\n\nHope your day is going well!",
         "{1}\n\nHope today is a good day!",
+        "Here you go:\n{1}",
         "Caption:\n{1}\nHave a good day :)",
         "Caption:\n{1}"
         ":o\n{1}",
@@ -30,7 +31,8 @@ class MMS:
     NAME = [
         "Hey {0}. Here's your daily comic!",
         "Have a great day {0}!",
-        "Hope your day is great {0}!"
+        "Hope you have a great day {0}!",
+        "Have a nice day {0}!"
     ]
     NONE = [
         ":)",
@@ -42,7 +44,8 @@ class MMS:
         "I hope your day is going great!",
         "Have a swell day!",
         "Hope this brightens your day!",
-        "Have a good day!"
+        "Have a good day!",
+        "Have a nice day :)"
     ]
 
     def __init__(self, name, phone_num, comic_num):
