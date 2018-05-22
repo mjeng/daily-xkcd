@@ -23,6 +23,8 @@ def flatten(cells):
     return sum(cells, [])
 
 def make_list(csv):
+    if csv == '':
+        return []
     strlist = csv.split(',')
     rv = [int(s) for s in strlist]
     return rv
@@ -74,28 +76,23 @@ def retrieve_mms_list(timestr):
         cells = [ws.range(*top_left, *bot_right)]
     else:
         cells = get_shaped_range(ws, [*top_left, *bot_right])
-    print("row count =", ws.row_count)
-    print("cells\n", cells)
 
-    mrcn = db_client.wb.sheet1.acell(MRCN_CELL)
+    mrcn_cell = db_client.wb.sheet1.acell(MRCN_CELL)
+    mrcn = int(mrcn_cell.value)
     mms_list = []
-    for i, row in enumerate(cells):
+    for row in cells:
         name = row[0].value
         phone = row[1].value
-        num_sent = row[2].value
+        num_sent = int(row[2].value)
         list_sent = make_list(row[3].value)
 
-        print(list_sent)
-
-        row[2].value += 1
+        row[2].value = num_sent + 1
         comic_num = find_comic_num(mrcn, list_sent)
         mms = twilio_utils.MMS(name, phone, comic_num)
         mms_list.append(mms)
 
-        print(list_sent)
         list_sent.append(comic_num)
         row[3].value = make_csv(list_sent)
-        print(row[3].value)
 
     cell_list = flatten(cells)
     ws.update_cells(cell_list)
