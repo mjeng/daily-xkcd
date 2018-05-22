@@ -80,6 +80,7 @@ def retrieve_mms_list(timestr):
     mrcn_cell = db_client.wb.sheet1.acell(MRCN_CELL)
     mrcn = int(mrcn_cell.value)
     mms_list = []
+    to_update = []
     for i, row in enumerate(cells):
         if row[1].value == '' or row[2].value == '':
             server_utils.report("Row {0} in worksheet {1} missing values".format(i+1, sheet_name))
@@ -97,8 +98,9 @@ def retrieve_mms_list(timestr):
         list_sent.append(comic_num)
         row[3].value = make_csv(list_sent)
 
-    cell_list = flatten(cells)
-    ws.update_cells(cell_list)
+        to_update.extend(row)
+
+    ws.update_cells(to_update)
 
     return mms_list
 #######################################
