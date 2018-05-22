@@ -1,3 +1,4 @@
+import server_utils
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
@@ -45,7 +46,7 @@ def check_url(img_url):
     try:
         assert matches is not None, "img_url format either has changed or the HTML structure has been changed"
     except AssertionError as e:
-        print(str(e))
+        server_utils.report(str(e))
         return False
 
     return True
@@ -60,8 +61,8 @@ def find_comic_url(comic_num):
         img_url = comic_div.find('img').attrs['src']
     except Exception as e:
         # TODO replace with some better way to report error
-        print("Error with finding img_url. Maybe xkcd page format changed. Listed error:")
-        print(str(e))
+        server_utils.report("Error with finding img_url. Maybe xkcd page format changed. Listed error:")
+        server_utils.report(str(e))
 
     img_url = "https:" + img_url
     proper_form = check_url(img_url)
@@ -80,8 +81,7 @@ def find_comic_caption(comic_num):
         comic_div = soup.find('div', {'id': 'comic'})
         img_caption = comic_div.find('img').attrs['title']
     except Exception as e:
-        # TODO replace with some better way to report error
-        print("Error with finding img_caption. Maybe xkcd page format changed. Listed error:")
-        print(str(e))
+        server_utils.report("Error with finding img_caption. Maybe xkcd page format changed. Listed error:")
+        server_utils.report(str(e))
 
     return img_caption

@@ -1,3 +1,4 @@
+import server_utils
 import twilio.rest
 import random
 
@@ -49,9 +50,15 @@ class MMS:
         try:
             int(comic_num)
         except ValueError:
-            print("Comic number needs to be able to be converted to int")
-        assert isinstance(name, str), "Name needs to be a string"
-        assert isinstance(phone_num, str), "Phone number needs to be a string"
+            server_utils.report("Comic number needs to be able to be converted to int when creating MMS object")
+            return
+
+        try:
+            assert isinstance(name, str), "Name needs to be a string when creating MMS object"
+            assert isinstance(phone_num, str), "Phone number needs to be a string when creating MMS object"
+        except AssertionError as e:
+            server_utils.report(e)
+            return
 
         self.name = name
         self.phone_num = phone_num
@@ -67,7 +74,7 @@ class MMS:
         self.comic_url = url
 
         if caption and self.name:
-            greeting = random.choice(MMS.CAPTION_NAME + MMS.CAPTION + MMS.NAME + MMS.NONE)
+            greeting = random.choice(MMS.CAPTION_NAME + MMS.CAPTION)
         elif self.name:
             greeting = random.choice(MMS.NAME + MMS.NONE)
         elif caption:

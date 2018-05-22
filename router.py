@@ -1,23 +1,23 @@
 import os
-import twilio_utils, scrape_utils, db_utils
+import twilio_utils, scrape_utils, db_utils, server_utils
 import random
 
-# TODO: temporary; replace with heroku config
-f = open("private.txt", 'r')
-SID = f.readline()[:-1] # to get rid of \n
-TOKEN = f.readline()[:-1]
-send_to = f.readline()[:-1]
-NUMBER = f.readline()[:-1]
-f.close()
+# # TODO: temporary; replace with heroku config
+# f = open("private.txt", 'r')
+# SID = f.readline()[:-1] # to get rid of \n
+# TOKEN = f.readline()[:-1]
+# send_to = f.readline()[:-1]
+# NUMBER = f.readline()[:-1]
+# f.close()
 
 ###############################################
 CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscribed " \
     + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
     + "STOP if you don't want to receive messages anymore!"
 
-# SID = os.environ["TWILIO_SID"]
-# TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
-# NUMBER = os.environ["TWILIO_NUMBER"]
+SID = os.environ["TWILIO_SID"]
+TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+NUMBER = os.environ["TWILIO_NUMBER"]
 
 twilio_client = twilio_utils.ClientWrapper(SID, TOKEN, NUMBER)
 
@@ -60,7 +60,7 @@ def run_once(name, number):
 
 # called periodically by clock dyno
 def run(timestr):
-    print("DEFINITELY RUNNING with timestr", timestr)
+    server_utils.report("RUNNING with timestr", timestr)
     # Retrieve most_recent_comic_num
     mrcn = scrape_utils.most_recent_comic_num()
 
