@@ -5,6 +5,7 @@ from google.auth.transport.requests import AuthorizedSession
 
 def setup_db():
     global wb
+    print(os.environ)
     _service_account_info = json.loads(os.environ["GOOGLE_AUTH"])
     _scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     _credentials = service_account.Credentials.from_service_account_info(_service_account_info)
