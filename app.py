@@ -15,12 +15,12 @@ SERVER_ERR_MSGS = {
 app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def homepage():
-    server_utils.report(request.form)
 
     if request.method == "GET":
         return render_template("index.html")
 
     if request.method == "POST":
+        server_utils.report(request.form)
         name = request.form["name"]
         number = request.form["phone"]
         time = request.form["time"]
