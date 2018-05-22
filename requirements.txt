@@ -1,0 +1,7 @@
+Flask
+gunicorn
+Jinja2
+twilio
+gspread
+oauth2client
+bs4
