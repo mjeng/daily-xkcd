@@ -18,7 +18,7 @@ twilio_client = twilio_utils.ClientWrapper(account_sid, auth_token, send_from)
 
 def add_db_entry(name, number, timestr):
     # the number should already be validated by the server-side checks
-    pnc = twilio_client.lookups.phone_numbers(number)
+    pnc = twilio_client.client.lookups.phone_numbers(number)
     pni = pnc.fetch()
     pn = pni.phone_number
 
