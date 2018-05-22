@@ -11,7 +11,7 @@ import scrape_utils
 ###############################################
 STAT_START_COL = {"letter": 'F', "number": 6}
 AUTHOR = "Matthew Jeng"
-TIMEZONE = "UTC"
+TIMEZONE = "PST"
 COLUMNS = "Name (str), Phone (str), Comics Sent (#), Comics Sent (csv)"
 BLANK = ''
 
@@ -24,12 +24,13 @@ METADATA = {"author": AUTHOR,
             "columns": COLUMNS,
             BLANK: BLANK,
             "sms price": "0.0075",
-            "mms price": "0.02"}
+            "mms price": "0.02",
+            "~cost/month": "=B10*B4*30"}
 ###############################################
 
 
 def get_time():
-    TIME_FORMAT = "%Y-%M-%d %H:%M:%S"
+    TIME_FORMAT = "%Y-%m-%d"
     return strftime(TIME_FORMAT, gmtime())
 
 def initialize_metadata():
