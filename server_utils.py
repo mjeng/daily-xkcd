@@ -112,4 +112,4 @@ def validate_inputs(name, number, twilio_client, time, submit_type):
 
 # just to have something more official/readable
 def report(str):
-    print(str)
+    print("[APP]", str)
