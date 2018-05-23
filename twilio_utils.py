@@ -14,7 +14,7 @@ class SMS:
 
 class MMS:
 
-    CAPTION_START = "\n-----"
+    CAPTION_START = "\n-----\n"
     CAPTION_END = "\n-----\n"
 
     CAPTION_NAME = [
