@@ -19,7 +19,7 @@ This is a full-stack app that uses the following frameworks/libraries/APIs:
 
 Here's a diagram showing how my project files all interact with each other (descriptions below):
 
-<img src=design.png width=80% height=auto>
+<img src=designV2.png width=80% height=auto>
 
 ### Frontend
 
@@ -32,6 +32,8 @@ Currently, all input validation is done server-side. Client-side validation is p
 
 There are four main components to the project backend: The sms/mms client (`Twilio`), the web scraper (`BeautifulSoup`), the database (`Google Sheets`), and the `router` that delegates to/from all of them. Each file in this project was written to be readable, well-abstracted, robust, and scalable (although I have no plans to scale up this project).
 
+**--OVERALL/router--**
+
 Heavy use of Heroku config vars was made to access sensitive information like Twilio and Google Auth authentication keys
 
 
@@ -42,11 +44,11 @@ The sms/mms client is powered by Twilio. Using Twilio's REST API, we can create 
 BeautifulSoup was used to scrape the xkcd website's subdomains (https://xkcd.com/*) for image urls and captions, which are later sent to the MMS client to compose and send.
 
 **--database--** (`db_client.py`, `db_utils.py`, `db_setup.py`)<br>
-I've gone with Google Sheets as a lightweight database - an interesting choice to many, probably. I chose Google Sheets because (1) this is my first full-stack project and Google Sheets has a really great UI, which was more comfortable for me to work with, and (2) I think it's cool that you can interact with Google Sheets through code! I'm using the `gspread` and `google-auth` (originally `oauth2client` until I found out that was deprecated) libraries to communicate with the Google Sheets API. My sheet
+I've gone with Google Sheets as a lightweight database - an interesting choice to many, probably. I chose Google Sheets primarily because this is my first full-stack project and Google Sheets has a really great UI, which was more comfortable for me to work with. I'm using the `gspread` and `google-auth` libraries to communicate with the Google Sheets API. For every user I only store 4 pieces of information: Name, number, number of comics sent to them, and a list of the comics sent. The second to last is just to keep some stats about the project. The last one makes sure no repeat comics are sent.
 
 _some interesting notes on my database_
 1. "lightweight database" - the cell cap for a single Google Sheets workbook is 2,000,000 and I use 6 cells per user => I can support >300,000 users.
 2. On my free plan for the Google Sheets API, I'm allotted 100 requests every 100 seconds. This might seem like an issue for scalability at first, but in fact it's not - I use batch queries and batch updates. Instead of updating cell-by-cell, I pull all the cells I need, update them locally, and send them back as one request, totaling two requests (+ misc requests for metadata checks) per update, which I only need to do once every 15-30 minutes.
 3. Currently, the process for choosing a comic for a user is to randomly select one and check if it's been sent to the user before - repeat if necessary. The probability of selecting an unused comic here follows a geometric distribution with parameter `p=(# comics unseen)/(# total comics)`. With a little math (or googling), we find that the expected number of random samples we need before we find a comic we haven't used yet is `1/p`. Currently xkcd has close to 2000 comics available. This means that I'd need to send ~1000 comics to a user before the expected number of samples I'd need for that user reaches just 2. At one comic each day, that's around 3 years before we reach this benchmark. Originally, I was going to convert my list of used comics to a list of unused comics at some benchmark (e.g. maybe when EV > 10), but decided that that would happen > 5 years from now, and by then something else would probably be obsolete or I would probably have a better way to do this whole project, or something else.
-4. I've written a file called db_setup.py that's never called during runtime. It was originally used for development when I needed to quickly teardown/rebuild/recustomize my Google Sheet. I've left it around in case I lose my db and I need to rebuild it, and probably more because it's a nicely written file I'm proud of and I don't want to delete :)
+4. I've written a file called db_setup.py that's never called during runtime. It was originally used for development when I needed to quickly teardown/rebuild/recustomize my Google Sheet. I've left it around in case I lose my db and I need to rebuild it, and probably because it's a nicely written file I'm proud of and I don't want to delete :)
 
