@@ -63,7 +63,7 @@ def retrieve_mms_list(timestr):
     wss = db_client.wb.worksheets()[1:] # First worksheet is metadata
     sheet_names = [ws.title for ws in wss]
     assert METADATA not in sheet_names, "Order of database sheets mixed up"
-    assert sheet_name in sheet_names, "Invalid sheet_name"
+    assert sheet_name in sheet_names, "Invalid sheet_name: {0}".format(sheet_name)
 
     ws = db_client.wb.worksheet(sheet_name)
     if ws.get_all_values() == []:
