@@ -16,11 +16,14 @@ This is a full-stack app that uses the following frameworks/libraries/APIs:
 * Twilio API
 * BeautifulSoup
 
-<img src=design.png>
+
+Here's a diagram showing how my project files all interact with each other (descriptions below):
+
+<img src=design.png width=80% height=auto>
 
 ### Frontend
 
-The website you see when you visit https://daily-xkcd.herokuapp.com/ is written in HTML/CSS with Jinja2 templating syntax and served by Flask. The site is (as you've guessed) hosted by Heroku. There are no valid subdomains, but the site is rendered dynamically depending on user submissions - when submissions are made, corresponding COMPLETED or ERROR pages, depending on input, are returned and served back to the root page. An example of an error would be if somebody tried to submit "abcd" as their phone number.
+The website you see when you visit https://daily-xkcd.herokuapp.com/ is written in HTML/CSS with Jinja2 templating syntax and served by Flask. The site is (as you've guessed) hosted by Heroku. There are no subdomains, but the site is rendered dynamically depending on user submissions - when submissions are made, corresponding COMPLETED or ERROR pages, depending on input, are returned and served back to the root page. An example of an error would be if somebody tried to submit "abcd" as their phone number, they would be served the ERROR page (templates/err.html).
 
 Currently, all input validation is done server-side. Client-side validation is planned for a future release.
 
