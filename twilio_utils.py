@@ -53,14 +53,14 @@ class MMS:
         try:
             int(comic_num)
         except ValueError:
-            server_utils.report("Comic number needs to be able to be converted to int when creating MMS object")
+            server_utils.log("Comic number needs to be able to be converted to int when creating MMS object")
             return
 
         try:
             assert isinstance(name, str), "Name needs to be a string when creating MMS object"
             assert isinstance(phone_num, str), "Phone number needs to be a string when creating MMS object"
         except AssertionError as e:
-            server_utils.report(e)
+            server_utils.log(e)
             return
 
         self.name = name
@@ -104,7 +104,7 @@ class ClientWrapper:
             from_=self.num,
             body=sms.message
         )
-        server_utils.report("Sent SMS with body: {0}".format(sms.message))
+        server_utils.log("Sent SMS with body: {0}".format(sms.message))
 
     def send_mms(self, mms):
         assert isinstance(mms, MMS), "mms needs to be an MMS object"
@@ -116,4 +116,4 @@ class ClientWrapper:
             body=mms.message,
             media_url=mms.comic_url
         )
-        server_utils.report("Sent MMS to {0} with media {0} and body: {1}".format(mms.name, mms.comic_url, mms.message))
+        server_utils.log("Sent MMS to {0} with media {1} and body: {2}".format(mms.name, mms.comic_url, mms.message))

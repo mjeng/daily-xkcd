@@ -83,7 +83,7 @@ def retrieve_mms_list(timestr):
     to_update = []
     for i, row in enumerate(cells):
         if row[1].value == '' or row[2].value == '':
-            server_utils.report("Row {0} in worksheet {1} missing values".format(i+1, sheet_name))
+            server_utils.log("Row {0} in worksheet {1} missing values".format(i+1, sheet_name))
             continue
         name = row[0].value
         phone = row[1].value

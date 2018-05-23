@@ -113,5 +113,5 @@ def validate_inputs(name, number, twilio_client, time, submit_type):
     return NO_ERR
 
 # just to have something more official/readable
-def report(str):
+def log(str):
     print("[APP]", str)

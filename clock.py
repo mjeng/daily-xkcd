@@ -14,5 +14,5 @@ def scheduled_job():
     timestr = clock_utils.get_time()
     router.run(timestr)
 
-server_utils.report("Scheduler starting")
+server_utils.log("Scheduler starting")
 sched.start()

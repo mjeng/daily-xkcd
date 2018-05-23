@@ -54,7 +54,7 @@ def run_once(name, number):
 # called periodically by clock dyno
 def run(timestr):
 
-    server_utils.report("RUNNING with timestr " + timestr)
+    server_utils.log("RUNNING with timestr " + timestr)
 
     # Retrieve most_recent_comic_num
     mrcn = scrape_utils.most_recent_comic_num()
@@ -75,7 +75,7 @@ def run(timestr):
             comic_caption = scrape_utils.find_comic_caption(comic_num)
             mms.update(comic_url, comic_caption)
         except Exception as e:
-            server_utils.report(e)
+            server_utils.log(e)
             continue
 
     # Call twilio and send all comics to phone # with greeting + caption
@@ -84,5 +84,5 @@ def run(timestr):
         try:
             twilio_client.send_mms(mms)
         except Exception as e:
-            server_utils.report(e)
+            server_utils.log(e)
             continue
