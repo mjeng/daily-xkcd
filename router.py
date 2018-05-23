@@ -7,6 +7,7 @@ import random
 CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscribed " \
     + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
     + "STOP if you don't want to receive messages anymore!"
+NOTIFY_FORMAT = "Type: {0}\nName: {1}\nNumber: {2}\nTime: {3}"
 
 def twilio_setup():
     global twilio_client
@@ -19,6 +20,11 @@ def twilio_setup():
 twilio_setup()
 ###############################################
 
+def notify_matt(type, name, number, time):
+    mynum = os.environ["MATT_PHONE"]
+    sms = twilio_utils.SMS(mynum, NOTIFY_FORMAT.format(type, name, number, time))
+    twilio_client.send_sms(sms)
+
 
 def add_db_entry(name, number, timestr):
     # the number should already be validated by the server-side checks
@@ -30,9 +36,7 @@ def add_db_entry(name, number, timestr):
 
 
 def send_sub_confirmation(name, number, time):
-
     sms = twilio_utils.SMS(number, CONFIRMATION_FORMAT.format(name, time))
-
     twilio_client.send_sms(sms)
 
 
@@ -51,7 +55,7 @@ def run_once(name, number):
     twilio_client.send_mms(mms)
 
 
-# called periodically by clock dyno
+# called periodically by Heroku Scheduler via one-off dyno
 def run(timestr):
 
     server_utils.log("RUNNING with timestr " + timestr)
