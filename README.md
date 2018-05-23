@@ -25,16 +25,21 @@ Here's a diagram showing how my project files all interact with each other (desc
 
 The website you see when you visit https://daily-xkcd.herokuapp.com/ is written in HTML/CSS with Jinja2 templating syntax and served by Flask. The site is (as you've guessed) hosted by Heroku. There are no subdomains, but the site is rendered dynamically depending on user submissions - when submissions are made, corresponding COMPLETED or ERROR pages, depending on input, are returned and served back to the root page. An example of an error would be if somebody tried to submit "abcd" as their phone number, they would be served the ERROR page (templates/err.html).
 
-Currently, all input validation is done server-side. Client-side validation is planned for a future release.
+Currently, all input validation is done server-side (in `server_utils.py`). Client-side validation is planned for a future release.
 
 
 ### Backend
 
-There are four main components to the project backend: The sms/mms client (`Twilio`), the web scraper (`BeautifulSoup`), the database (`Google Sheets`), and the `router` that delegates to/from all of them. Each file in this project was written to be readable, well-abstracted, robust, and scalable (although I have no plans to scale up this project).
+There are four main components to the project backend: The sms/mms client (**Twilio**), the web scraper (**BeautifulSoup**), the database (**Google Sheets**), and the **router** that delegates to/from all of them. Each file in this project was written to be readable, well-abstracted, robust, and scalable (although I have no plans to scale up this project).
 
-**--OVERALL/router--**
+**--OVERALL/router--** (`router.py`)<br>
+All backend processes are delegated through `router.py`. The router is called by either `app.py` when a user enters their information and submits, or by `clock.py` on regular half hour intervals. When users submit, `router.py` just passes their information along to `db_utils.py` to add an entry into the appropriate table in **Google Sheets**. The main process is run when `clock.py`, triggers. `clock.py` passes the time to `router.py`, which then does roughly the following:
+1. It passes the time to `db_utils.py`, which queries **Google Sheets** for users who signed up for the corresponding time slot, chooses a comic that hasn't been sent to that user yet, and returns that to `router.py`.
+2. `router.py` passes the `comic_num` of each user to `scrape_utils.py`, which scrapes https://xkcd.com/ using **BeautifulSoup** for the corresponding `comic_url` and `comic_caption`, and returns those back to `router.py`.
+3. `router.py` takes all of these values (`name`, `phone_num`, `comic_url`, `comic_caption`) and creates a `twilio_utils.MMS` (defined in `twilio_utils`) object for each user.
+4. Each `twilio_utils.MMS` object is then passed to the **Twilio** client - `twilio_utils.ClientWrapper.send_mms()` - which sends the mms to its corresponding user.
 
-Heavy use of Heroku config vars was made to access sensitive information like Twilio and Google Auth authentication keys
+Note: Heavy use of Heroku config vars was made to access sensitive information like Twilio and Google Auth authentication keys
 
 
 **--sms/mms client--** (`twilio_utils.py`)<br>
