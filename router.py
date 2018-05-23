@@ -7,7 +7,7 @@ import random
 CONFIRMATION_FORMAT = "Hey {0}! This text is just to confirm that you've subscribed " \
     + "to getting daily texts at {1} PST every day from daily-xkcd. You can always reply " \
     + "STOP if you don't want to receive messages anymore!"
-NOTIFY_FORMAT = "Type: {0}\nName: {1}\nNumber: {2}\nTime: {3}"
+NOTIFY_FORMAT = "Type: {0}\nName: {1}\nNumber: {2}\nTime: {3}\nStatus: {4}"
 
 def twilio_setup():
     global twilio_client
@@ -20,9 +20,9 @@ def twilio_setup():
 twilio_setup()
 ###############################################
 
-def notify_matt(type, name, number, time):
+def notify_matt(type, name, number, time, status):
     mynum = os.environ["MATT_PHONE"]
-    sms = twilio_utils.SMS(mynum, NOTIFY_FORMAT.format(type, name, number, time))
+    sms = twilio_utils.SMS(mynum, NOTIFY_FORMAT.format(type, name, number, time, status))
     twilio_client.send_sms(sms)
 
 
