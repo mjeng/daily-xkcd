@@ -66,6 +66,8 @@ def validate_name(name):
     return True
 
 def validate_number(number, twilio_client):
+    if number == '':
+        return False
     pnc = twilio_client.client.lookups.phone_numbers(number)
     try:
         pn = pnc.fetch()
