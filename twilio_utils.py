@@ -23,7 +23,7 @@ class MMS:
         "{1}\n\nHope today is a good day!",
         "Here you go:\n{1}",
         "Caption:\n{1}\nHave a good day :)",
-        "Caption:\n{1}"
+        "Caption:\n{1}",
         ":o\n{1}",
         "{1}",
         "Enjoy!\n{1}"
