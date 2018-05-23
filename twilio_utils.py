@@ -14,6 +14,9 @@ class SMS:
 
 class MMS:
 
+    CAPTION_START = "\n-----"
+    CAPTION_END = "\n-----\n"
+
     CAPTION_NAME = [
         "Hi {0}! Here's your xkcd comic:\n{1}",
         "Here you go {0}:\n{1}"
@@ -85,6 +88,8 @@ class MMS:
         else:
             greeting = random.choice(MMS.NONE)
 
+        if caption:
+            caption = MMS.CAPTION_START + caption + MMS.CAPTION_END
         self.message = greeting.format(self.name, caption)
 
         self.updated = True
@@ -104,7 +109,7 @@ class ClientWrapper:
             from_=self.num,
             body=sms.message
         )
-        server_utils.log("Sent SMS with body: {0}".format(sms.message))
+        server_utils.log("Sent SMS with body:\n{0}".format(sms.message))
 
     def send_mms(self, mms):
         assert isinstance(mms, MMS), "mms needs to be an MMS object"
@@ -116,4 +121,4 @@ class ClientWrapper:
             body=mms.message,
             media_url=mms.comic_url
         )
-        server_utils.log("Sent MMS to {0} with media {1} and body: {2}".format(mms.name, mms.comic_url, mms.message))
+        server_utils.log("Sent MMS to {0} with media_url <{1}> (comic #{2}) and body:\n{3}".format(mms.name, mms.comic_url, mms.comic_num, mms.message))
