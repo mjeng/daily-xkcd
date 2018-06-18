@@ -2,7 +2,7 @@
 Welcome to my first full-stack app, <strong>daily-xkcd</strong>! Users sign up through a simple website to get a text with an image scraped from xkcd's website, https://xkcd.com/ and an accompanying message at a specified time every day ( full credits to xkcd for all their great comics :) ). Visit the app here: <strong>https://daily-xkcd.herokuapp.com/</strong>.
 
 ## Design/In-depth Description/I hope recruiters read this :^)
-This is a full-stack app that uses the following frameworks/libraries/APIs:
+This is a full-stack MVC-compliant app that uses the following frameworks/libraries/APIs:
 
 (frontend)<br>
 * HTML/CSS with Jinja2 templating
