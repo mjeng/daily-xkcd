@@ -92,6 +92,14 @@ class MMS:
             caption = MMS.CAPTION_START + caption + MMS.CAPTION_END
         self.message = greeting.format(self.name, caption)
 
+
+        ########################### Overwriting caption
+        if caption:
+            self.message = caption
+        else:
+            self.message = ""
+        ###########################
+
         self.updated = True
 
 
