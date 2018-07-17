@@ -19,7 +19,7 @@ This is a full-stack MVC-compliant app that uses the following frameworks/librar
 
 Here's a diagram showing how my project files all interact with each other (descriptions below):
 
-<img src=designV2.png width=80% height=auto>
+<img src=project-design.png width=80% height=auto>
 
 ### Frontend
 
