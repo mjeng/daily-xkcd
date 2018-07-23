@@ -37,7 +37,7 @@ def add_db_entry(name, number, timestr):
 
 def send_sub_confirmation(name, number, time):
     sms = twilio_utils.SMS(number, CONFIRMATION_FORMAT.format(name, time))
-    twilio_client.send_sms(sms)
+    twilio_client.send_captionless_mms(sms)
 
 
 def run_once(name, number):
@@ -52,7 +52,7 @@ def run_once(name, number):
 
     mms.update(comic_url, caption)
 
-    twilio_client.send_mms(mms)
+    twilio_client.send_captionless_mms(mms)
 
 
 # called periodically by Heroku Scheduler via one-off dyno

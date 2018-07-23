@@ -130,3 +130,14 @@ class ClientWrapper:
             media_url=mms.comic_url
         )
         server_utils.log("Sent MMS to {0} with media_url <{1}> (comic #{2}) and body:\n{3}".format(mms.name, mms.comic_url, mms.comic_num, mms.message))
+
+    def send_captionless_mms(self, mms):
+        assert isinstance(mms, MMS), "mms needs to be an MMS object"
+        assert mms.updated == True, "mms not updated with message and/or url"
+
+        self.client.messages.create(
+            mms.phone_num,
+            from_=self.num,
+            media_url=mms.comic_url
+        )
+        server_utils.log("Sent MMS to {0} with media_url <{1}> (comic #{2})".format(mms.name, mms.comic_url, mms.comic_num))
