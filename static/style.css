@@ -5,7 +5,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-family: "Comic Sans MS", "ChalkboardSE-Light", sans-serif;
 }
 /* nav bar *******************************************/
 #myname {
@@ -35,7 +35,7 @@ html, body {
 .header {
   text-align: center;
   padding: 8% 8% 4% 8%;
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-family: "Comic Sans MS", "ChalkboardSE-Light", sans-serif;
 }
 .stupid-inner {
   /* position: absolute;
@@ -66,7 +66,7 @@ form {
 input#phone, input#name {
   border: none;
   border-bottom: 1px solid black;
-  font-family: "Comic Sans MS", sans-serif;
+  font-family: "Comic Sans MS", "ChalkboardSE-Light", sans-serif;
   text-align: center;
   margin-bottom: 5px;
   width: 100px;
@@ -79,7 +79,7 @@ input[type=submit] {
   border: none;
   border-radius: 10px;
   background-color: #f5f5dc;
-  font-family: "Comic Sans MS", sans-serif;
+  font-family: "Comic Sans MS", "ChalkboardSE-Light", sans-serif;
 }
 input[type=submit]:hover {
   cursor: pointer;
