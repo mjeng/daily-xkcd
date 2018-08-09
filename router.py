@@ -86,7 +86,10 @@ def run(timestr):
     for mms in mms_list:
         # If one message sent errors, the others should still send
         try:
-            twilio_client.send_captionless_mms(mms)
+            if mms.name == "YEETchen":
+                twilio_client.send_mms(mms)
+            else:
+                twilio_client.send_captionless_mms(mms)
         except Exception as e:
             server_utils.log(e)
             continue
